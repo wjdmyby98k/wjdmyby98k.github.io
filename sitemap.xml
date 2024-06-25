@@ -2,7 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://wjdmyby98k.github.io/2024/06/25/Linux%E8%BF%9B%E7%A8%8BAPI/</loc>
+    <loc>https://wjdmyby98k.github.io/2024/06/25/%E6%9C%80%E5%B0%8F%E7%94%9F%E6%88%90%E6%A0%91/</loc>
+    
+    <lastmod>2024-06-25</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://wjdmyby98k.github.io/2024/06/25/%E5%85%B3%E4%BA%8ECpp%E5%8F%B3%E5%80%BC%E7%9A%84%E4%B8%80%E4%BA%9B%E7%90%86%E8%A7%A3/</loc>
     
     <lastmod>2024-06-25</lastmod>
     
@@ -12,6 +21,15 @@
   
   <url>
     <loc>https://wjdmyby98k.github.io/2024/06/24/uthread%E8%AE%B2%E8%A7%A3/</loc>
+    
+    <lastmod>2024-06-25</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://wjdmyby98k.github.io/2024/06/25/Linux%E8%BF%9B%E7%A8%8BAPI/</loc>
     
     <lastmod>2024-06-25</lastmod>
     
@@ -31,7 +49,7 @@
   <url>
     <loc>https://wjdmyby98k.github.io/categories/index.html</loc>
     
-    <lastmod>2024-06-24</lastmod>
+    <lastmod>2024-06-25</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -54,6 +72,20 @@
   </url>
   
   <url>
+    <loc>https://wjdmyby98k.github.io/tags/Cpp/</loc>
+    <lastmod>2024-06-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://wjdmyby98k.github.io/tags/leetcode%E3%80%81%E6%9C%80%E5%B0%8F%E7%94%9F%E6%88%90%E6%A0%91/</loc>
+    <lastmod>2024-06-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://wjdmyby98k.github.io/tags/%E7%AE%97%E6%B3%95/</loc>
     <lastmod>2024-06-25</lastmod>
     <changefreq>weekly</changefreq>
@@ -64,6 +96,13 @@
   
   <url>
     <loc>https://wjdmyby98k.github.io/categories/Linux/</loc>
+    <lastmod>2024-06-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://wjdmyby98k.github.io/categories/Cpp/</loc>
     <lastmod>2024-06-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
