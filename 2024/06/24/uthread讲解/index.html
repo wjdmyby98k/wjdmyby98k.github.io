@@ -217,31 +217,45 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p><a target="_blank" rel="noopener" href="https://developer.aliyun.com/article/52886#slide-4">ucontext-人人都可以实现的简单协程库</a><br><a target="_blank" rel="noopener" href="https://hub.nuaa.cf/Winnerhust/uthread">github地址</a><br><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=Mzg3Mzg0NTQ0Ng==&amp;mid=2247484615&amp;idx=1&amp;sn=9948c7da719028004513981d2a79bf41&amp;chksm=ced8836ef9af0a780a72e02c83bfbbad5772209ecfefe81c8fbc1edcd1f2d9cf53a53c65e764&amp;token=1321706181&amp;lang=zh_CN#rd">vscode c++调试环境搭建</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/339837580">程序员应如何理解协程</a></p>
+        <p><a target="_blank" rel="noopener" href="https://developer.aliyun.com/article/52886#slide-4">ucontext-人人都可以实现的简单协程库</a><br>
+<a target="_blank" rel="noopener" href="https://hub.nuaa.cf/Winnerhust/uthread">github地址</a><br>
+<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=Mzg3Mzg0NTQ0Ng==&amp;mid=2247484615&amp;idx=1&amp;sn=9948c7da719028004513981d2a79bf41&amp;chksm=ced8836ef9af0a780a72e02c83bfbbad5772209ecfefe81c8fbc1edcd1f2d9cf53a53c65e764&amp;token=1321706181&amp;lang=zh_CN#rd">vscode c++调试环境搭建</a><br>
+<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/339837580">程序员应如何理解协程</a></p>
 <p>在此记录一下协程的基本概念，后续再考虑实现手写的协程。</p>
 <hr>
-<h2 id="uthread说明"><a href="#uthread说明" class="headerlink" title="uthread说明"></a>uthread说明</h2><p>一个简单的C++用户级线程（协程）库</p>
+<h2 id="uthread说明">uthread说明</h2>
+<p>一个简单的C++用户级线程（协程）库</p>
 <ul>
 <li>一个调度器可以拥有多个协程</li>
 <li>通过<code>uthread_create</code>创建一个协程</li>
 <li>通过<code>uthread_resume</code>运行或者恢复运行一个协程</li>
 <li>通过<code>uthread_yield</code>挂起一个协程，并切换到主进程中</li>
 <li>通过<code>schedule_finished</code> 判断调度器中的协程是否全部运行完毕</li>
-<li>每个协程最多拥有128Kb的栈，增大栈空间需要修改源码的宏<code>DEFAULT_STACK_SIZE</code>，并重新编译</li>
+<li>每个协程最多拥有128Kb的栈，增大栈空间需要修改源码的宏<code>DEFAULT_STACK_SIZE </code>，并重新编译</li>
 </ul>
-<p>更详细的介绍，请查看博客 <a target="_blank" rel="noopener" href="http://blog.csdn.net/qq910894904/article/details/41911175">人既无名的专栏</a>. </p>
-<h3 id="细节"><a href="#细节" class="headerlink" title="细节"></a>细节</h3><ul>
-<li>ctx保存协程的上下文，stack为协程的栈，栈大小默认为DEFAULT_STACK_SZIE=128Kb.你可以根据自己的需求更改栈的大小。</li>
-<li>func为协程执行的用户函数，arg为func的参数</li>
-<li><p>state表示协程的运行状态，包括FREE,RUNNABLE,RUNING,SUSPEND,分别表示空闲，就绪，正在执行和挂起四种状态。</p>
+<p>更详细的介绍，请查看博客 <a target="_blank" rel="noopener" href="http://blog.csdn.net/qq910894904/article/details/41911175">人既无名的专栏</a>.</p>
+<h3 id="细节">细节</h3>
+<ul>
+<li>
+<p>ctx保存协程的上下文，stack为协程的栈，栈大小默认为DEFAULT_STACK_SZIE=128Kb.你可以根据自己的需求更改栈的大小。</p>
 </li>
-<li><p>调度器包括主函数的上下文main,包含当前调度器拥有的所有协程的vector类型的threads，以及指向当前正在执行的协程的编号running_thread.如果当前没有正在执行的协程时，running_thread=-1.</p>
+<li>
+<p>func为协程执行的用户函数，arg为func的参数</p>
+</li>
+<li>
+<p>state表示协程的运行状态，包括FREE,RUNNABLE,RUNING,SUSPEND,分别表示空闲，就绪，正在执行和挂起四种状态。</p>
+</li>
+<li>
+<p>调度器包括主函数的上下文main,包含当前调度器拥有的所有协程的vector类型的threads，以及指向当前正在执行的协程的编号running_thread.如果当前没有正在执行的协程时，running_thread=-1.</p>
 </li>
 </ul>
-<p>下面给出一个简单例子，可以自己打断点调试一下，<font color = red>最重要的点：我感觉恢复上下文的时候，是恢复到下一行！我们只需要关注上下文之间的跳转即可！！！</font><br><img src="/2024/06/24/uthread%E8%AE%B2%E8%A7%A3/uthread1.png" class="" title="图片1"><br>下面也给出调试的配置launch.json</p>
+<p>下面给出一个简单例子，可以自己打断点调试一下，<font color = red>最重要的点：我感觉恢复上下文的时候，是恢复到下一行！我们只需要关注上下文之间的跳转即可！！！</font></p>
+<img src="/2024/06/24/uthread%E8%AE%B2%E8%A7%A3/uthread1.png" class="" title="图片1">
+<p>下面也给出调试的配置launch.json</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="comment">// 使用 IntelliSense 了解相关属性。 </span></span><br><span class="line">    <span class="comment">// 悬停以查看现有属性的描述。</span></span><br><span class="line">    <span class="comment">// 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387</span></span><br><span class="line">    <span class="attr">&quot;version&quot;</span><span class="punctuation">:</span> <span class="string">&quot;0.2.0&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;configurations&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;(gdb) 启动&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cppdbg&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;request&quot;</span><span class="punctuation">:</span> <span class="string">&quot;launch&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;program&quot;</span><span class="punctuation">:</span> <span class="string">&quot;$&#123;workspaceFolder&#125;/test1&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;stopAtEntry&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;cwd&quot;</span><span class="punctuation">:</span> <span class="string">&quot;$&#123;fileDirname&#125;&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;environment&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;externalConsole&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;MIMode&quot;</span><span class="punctuation">:</span> <span class="string">&quot;gdb&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;setupCommands&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">                <span class="punctuation">&#123;</span></span><br><span class="line">                    <span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;为 gdb 启用整齐打印&quot;</span><span class="punctuation">,</span></span><br><span class="line">                    <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot;-enable-pretty-printing&quot;</span><span class="punctuation">,</span></span><br><span class="line">                    <span class="attr">&quot;ignoreFailures&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line">                <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="punctuation">&#123;</span></span><br><span class="line">                    <span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;将反汇编风格设置为 Intel&quot;</span><span class="punctuation">,</span></span><br><span class="line">                    <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot;-gdb-set disassembly-flavor intel&quot;</span><span class="punctuation">,</span></span><br><span class="line">                    <span class="attr">&quot;ignoreFailures&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line">                <span class="punctuation">&#125;</span></span><br><span class="line">            <span class="punctuation">]</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
 <p>重点是这一行 <code>&quot;program&quot;: &quot;$&#123;workspaceFolder&#125;/test1&quot;</code></p>
-<h2 id="uthread代码"><a href="#uthread代码" class="headerlink" title="uthread代码"></a>uthread代码</h2><p>总共就只有四个文件，这里都给出来，加了一点自己的注释理解</p>
+<h2 id="uthread代码">uthread代码</h2>
+<p>总共就只有四个文件，这里都给出来，加了一点自己的注释理解</p>
 <p>Makefile</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">all:</span><br><span class="line">	g++  uthread.cpp  -g -c</span><br><span class="line">	g++  main.cpp -g -o main uthread.o</span><br><span class="line">clean:</span><br><span class="line">	rm -f uthread.o main</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>uthread.h</p>
@@ -332,7 +346,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#uthread%E8%AF%B4%E6%98%8E"><span class="nav-number">1.</span> <span class="nav-text">uthread说明</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%86%E8%8A%82"><span class="nav-number">1.1.</span> <span class="nav-text">细节</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#uthread%E4%BB%A3%E7%A0%81"><span class="nav-number">2.</span> <span class="nav-text">uthread代码</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#uthread%E8%AF%B4%E6%98%8E"><span class="nav-text">uthread说明</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%86%E8%8A%82"><span class="nav-text">细节</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#uthread%E4%BB%A3%E7%A0%81"><span class="nav-text">uthread代码</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -346,7 +360,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-count">9</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
