@@ -216,25 +216,19 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="Linux静态库和动态库">Linux静态库和动态库</h2>
-<p><a target="_blank" rel="noopener" href="https://subingwen.cn/linux/library">转载自subingwen老师</a></p>
+        <h2 id="Linux静态库和动态库"><a href="#Linux静态库和动态库" class="headerlink" title="Linux静态库和动态库"></a>Linux静态库和动态库</h2><p><a target="_blank" rel="noopener" href="https://subingwen.cn/linux/library">转载自subingwen老师</a></p>
 <p>不管是Linux还是Windows中的库文件其本质和工作模式都是相同的, 只不过在不同的平台上库对应的文件格式和文件后缀不同。程序中调用的库有两种<strong>静态库</strong>和<strong>动态库</strong>，不管是哪种库文件本质是还是源文件，只不过是二进制格式只有计算机能够识别。</p>
 <p>在项目中使用库一般有两个目的，一个是为了使程序更加简洁不需要在项目中维护太多的源文件，另一方面是为了源代码保密，毕竟不是所有人都想把自己编写的程序开源出来。</p>
 <p>那么怎么使用呢，也很简单，拿到库，以及对应的头文件，在自己的代码中调用头文件的API即可。</p>
-<h3 id="1-静态库">1. 静态库</h3>
-<p>Linux中静态库由程序ar生成，现在基本使用动态库。静态库一般命名为libxxx.a</p>
-<h4 id="生成静态库">生成静态库</h4>
-<p>生成静态链接库，需要先对源文件进行汇编操作，gcc xxx.c -c得到一系列.o文件，再把这些.o文件进行打包，得到静态库文件</p>
+<h3 id="1-静态库"><a href="#1-静态库" class="headerlink" title="1. 静态库"></a>1. 静态库</h3><p>Linux中静态库由程序ar生成，现在基本使用动态库。静态库一般命名为libxxx.a</p>
+<h4 id="生成静态库"><a href="#生成静态库" class="headerlink" title="生成静态库"></a>生成静态库</h4><p>生成静态链接库，需要先对源文件进行汇编操作，gcc xxx.c -c得到一系列.o文件，再把这些.o文件进行打包，得到静态库文件</p>
 <p>一般使用ar工具用到三个参数</p>
 <ul>
-<li>
-<p>c：创建一个库，不管库是否存在，都将创建。</p>
+<li><p>c：创建一个库，不管库是否存在，都将创建。</p>
 </li>
-<li>
-<p>s：创建目标文件索引，这在创建较大的库时能加快时间。</p>
+<li><p>s：创建目标文件索引，这在创建较大的库时能加快时间。</p>
 </li>
-<li>
-<p>r：在库中插入模块(替换)。默认新的成员添加在库的结尾处，如果模块名已经在库中存在，则替换同名的模块。</p>
+<li><p>r：在库中插入模块(替换)。默认新的成员添加在库的结尾处，如果模块名已经在库中存在，则替换同名的模块。</p>
 <img src="/2024/07/19/Linux%E9%9D%99%E6%80%81%E5%BA%93%E5%92%8C%E5%8A%A8%E6%80%81%E5%BA%93/a.png" class="" title="a.png">
 </li>
 </ul>
@@ -259,18 +253,14 @@
 <p>第三步：拿到静态库和相关的头文件以后，就可以进行使用了</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">-L指定库路径 -l指定库名字 -I指定头文件路径</span></span><br><span class="line">gcc main.c -o main -L. -lcalc -I ./include/</span><br></pre></td></tr></table></figure>
 <img src="/2024/07/19/Linux%E9%9D%99%E6%80%81%E5%BA%93%E5%92%8C%E5%8A%A8%E6%80%81%E5%BA%93/1.png" class="" title="1.png">
-<h3 id="2-动态库">2. 动态库</h3>
-<p>动态链接库是程序运行时加载的库，当动态链接库正确部署之后，运行的多个程序可以使用同一个加载到内存中的动态库，因此在Linux中动态链接库也可称之为共享库。</p>
+<h3 id="2-动态库"><a href="#2-动态库" class="headerlink" title="2. 动态库"></a>2. 动态库</h3><p>动态链接库是程序运行时加载的库，当动态链接库正确部署之后，运行的多个程序可以使用同一个加载到内存中的动态库，因此在Linux中动态链接库也可称之为共享库。</p>
 <p>动态链接库是目标文件的集合，目标文件在动态链接库中的组织方式是按照特殊方式形成的。库中函数和变量的地址使用的是相对地址（静态库中使用的是绝对地址），其真实地址是在应用程序加载动态库时形成的。</p>
-<p>关于动态库的命名规则如下:在Linux中动态库以lib作为前缀, 以.so作为后缀, 中间是库的名字自己指定即可, 即: <a target="_blank" rel="noopener" href="http://libxxx.so">libxxx.so</a></p>
-<h4 id="2-1-生成动态库">2.1 生成动态库</h4>
-<p>生成动态库是使用gcc命令加上-fPIC(-fpic)以及-shared参数</p>
+<p>关于动态库的命名规则如下:在Linux中动态库以lib作为前缀, 以.so作为后缀, 中间是库的名字自己指定即可, 即: libxxx.so</p>
+<h4 id="2-1-生成动态库"><a href="#2-1-生成动态库" class="headerlink" title="2.1 生成动态库"></a>2.1 生成动态库</h4><p>生成动态库是使用gcc命令加上-fPIC(-fpic)以及-shared参数</p>
 <ul>
-<li>
-<p>-fPIC 或 -fpic的意义是让gcc生成的代码是与位置无关的，也就是使用相对位置</p>
+<li><p>-fPIC 或 -fpic的意义是让gcc生成的代码是与位置无关的，也就是使用相对位置</p>
 </li>
-<li>
-<p>-shared的意义是告诉编译器生成一个动态库</p>
+<li><p>-shared的意义是告诉编译器生成一个动态库</p>
 </li>
 </ul>
 <img src="/2024/07/19/Linux%E9%9D%99%E6%80%81%E5%BA%93%E5%92%8C%E5%8A%A8%E6%80%81%E5%BA%93/so.png" class="" title="so.png">
@@ -280,18 +270,14 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -shared 与位置无关的目标文件(*.o) -o 动态库(libxxx.so)</span><br></pre></td></tr></table></figure>
 <p>第三步：拿到静态库和相关的头文件以后，就可以进行使用了</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc main.c -o main -L. -lcalc -I ./include/</span><br></pre></td></tr></table></figure>
-<p><strong><a target="_blank" rel="noopener" href="http://xn--libcalc-yx3l84u7pg0wfsvuh6o0nfc5wgz1kn6g.xn--alibcalc-zc2n.so">注意这里如果同时存在libcalc.a和libcalc.so</a>，那么编译器会优先使用动态库！</strong></p>
-<h4 id="2-2-动态库加载问题⭐">2.2 动态库加载问题⭐</h4>
-<h5 id="2-2-1-库的工作原理">2.2.1 库的工作原理</h5>
-<p>上面第三步的命令运行成功以后，会在本地生成可执行文件main，运行会报错</p>
+<p><strong>注意这里如果同时存在libcalc.a和libcalc.so，那么编译器会优先使用动态库！</strong></p>
+<h4 id="2-2-动态库加载问题⭐"><a href="#2-2-动态库加载问题⭐" class="headerlink" title="2.2 动态库加载问题⭐"></a>2.2 动态库加载问题⭐</h4><h5 id="2-2-1-库的工作原理"><a href="#2-2-1-库的工作原理" class="headerlink" title="2.2.1 库的工作原理"></a>2.2.1 库的工作原理</h5><p>上面第三步的命令运行成功以后，会在本地生成可执行文件main，运行会报错</p>
 <img src="/2024/07/19/Linux%E9%9D%99%E6%80%81%E5%BA%93%E5%92%8C%E5%8A%A8%E6%80%81%E5%BA%93/2.png" class="" title="2.png">
 <p>在程序编译的最后一个阶段，也就是链接成可执行文件。<strong>我们使用gcc -L指定库路径</strong></p>
 <ul>
-<li>
-<p>如果是使用静态库，那么静态库会被打包到可执行文件中，当可执行文件被执行，静态库中的代码也会被加载到内存中，因此不会出现静态库找不到而无法被加载的问题。</p>
+<li><p>如果是使用静态库，那么静态库会被打包到可执行文件中，当可执行文件被执行，静态库中的代码也会被加载到内存中，因此不会出现静态库找不到而无法被加载的问题。</p>
 </li>
-<li>
-<p>如果是使用动态库呢？我们只会检查这个-L指定的路径下库文件是否存在，同样对应的动态库文件也没有被打包到可执行文件中，只是在可执行程序中记录了库的那个名字。</p>
+<li><p>如果是使用动态库呢？我们只会检查这个-L指定的路径下库文件是否存在，同样对应的动态库文件也没有被打包到可执行文件中，只是在可执行程序中记录了库的那个名字。</p>
 <ul>
 <li>当可执行文件被执行的时候，会先去检测这个动态库是否可以被加载，加载不到就会提示上面的报错。</li>
 <li>当动态库中的函数被调用了，这个时候动态库才会被加载到内存，如果不调用则不加载</li>
@@ -299,50 +285,38 @@
 </ul>
 </li>
 </ul>
-<h5 id="2-2-2-动态链接器">2.2.2 动态链接器</h5>
-<p>动态链接器是一个独立于应用程序的进程, 属于操作系统, 当用户的程序需要加载动态库的时候动态链接器就开始工作了，很显然动态链接器根本就不知道用户通过 gcc 编译程序的时候通过参数 -L指定的路径。</p>
+<h5 id="2-2-2-动态链接器"><a href="#2-2-2-动态链接器" class="headerlink" title="2.2.2 动态链接器"></a>2.2.2 动态链接器</h5><p>动态链接器是一个独立于应用程序的进程, 属于操作系统, 当用户的程序需要加载动态库的时候动态链接器就开始工作了，很显然动态链接器根本就不知道用户通过 gcc 编译程序的时候通过参数 -L指定的路径。</p>
 <p>那么动态链接器是如何搜索某一个动态库的呢，在它内部有一个默认的搜索顺序，按照优先级从高到低的顺序分别是：</p>
 <ul>
-<li>
-<p>可执行文件内部的 DT_RPATH 段</p>
+<li><p>可执行文件内部的 DT_RPATH 段</p>
 </li>
-<li>
-<p>系统的环境变量 <strong>LD_LIBRARY_PATH</strong></p>
+<li><p>系统的环境变量 <strong>LD_LIBRARY_PATH</strong></p>
 </li>
-<li>
-<p>系统动态库的缓存文件 <strong>/etc/ld.so.cache</strong></p>
+<li><p>系统动态库的缓存文件 <strong>/etc/ld.so.cache</strong></p>
 </li>
-<li>
-<p>存储动态库/静态库的系统目录 <strong>/lib/</strong>、 <strong>/usr/lib</strong>等</p>
+<li><p>存储动态库/静态库的系统目录 <strong>/lib/</strong>、 <strong>/usr/lib</strong>等</p>
 </li>
 </ul>
 <p>按照以上四个顺序, 依次搜索, 找到之后结束遍历, 最终还是没找到, 动态连接器就会提示动态库找不到的错误信息。</p>
-<h5 id="2-2-3-解决方案">2.2.3 解决方案</h5>
-<p>可执行程序生成之后, 根据动态链接器的搜索路径, 我们可以提供三种解决方案，我们只需要将动态库的路径放到对应的环境变量或者系统配置文件中，同样也可以将动态库拷贝到系统库目录（或者是将动态库的软链接文件放到这些系统库目录中）。</p>
+<h5 id="2-2-3-解决方案"><a href="#2-2-3-解决方案" class="headerlink" title="2.2.3 解决方案"></a>2.2.3 解决方案</h5><p>可执行程序生成之后, 根据动态链接器的搜索路径, 我们可以提供三种解决方案，我们只需要将动态库的路径放到对应的环境变量或者系统配置文件中，同样也可以将动态库拷贝到系统库目录（或者是将动态库的软链接文件放到这些系统库目录中）。</p>
 <p>方案1：将库路径添加到环境变量<strong>LD_LIBRARY_PATH</strong>中</p>
 <ul>
-<li>
-<p>找到相关配置文件</p>
+<li><p>找到相关配置文件</p>
 <ul>
-<li>用户级别：~/.bashrc</li>
+<li>用户级别：~/.bashrc  </li>
 <li>系统级别：/etc/profile</li>
 </ul>
 </li>
-<li>
-<p>在文件最后一行添加</p>
+<li><p>在文件最后一行添加</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export LD_LIBRARY_PATH =$LD_LIBRARY_PATH :动态库的绝对路径</span><br></pre></td></tr></table></figure>
 </li>
-<li>
-<p>让修改的配置文件生效</p>
+<li><p>让修改的配置文件生效</p>
 <ul>
-<li>
-<p>修改了用户级别的配置文件，关闭当前终端，打开一个新的终端配置就生效了</p>
+<li><p>修改了用户级别的配置文件，关闭当前终端，打开一个新的终端配置就生效了</p>
 </li>
-<li>
-<p>修改了系统级别的配置文件，注销或关闭系统，再开机配置就生效了</p>
+<li><p>修改了系统级别的配置文件，注销或关闭系统，再开机配置就生效了</p>
 </li>
-<li>
-<p>不想执行上面的操作，可以执行一个命令让配置重新被加载</p>
+<li><p>不想执行上面的操作，可以执行一个命令让配置重新被加载</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">修改的是哪一个就执行对应的那个命令</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">source</span> 可以简写为一个 . , 作用是让文件内容被重新加载</span></span><br><span class="line">source ~/.bashrc          (. ~/.bashrc)</span><br><span class="line">source /etc/profile       (. /etc/profile)</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
@@ -350,26 +324,20 @@
 </ul>
 <p>方案2：更新/etc/ld.so.cache文件</p>
 <ul>
-<li>
-<p>找到动态库所在的绝对路径（不包括库的名字）比如：/home/jia/code/</p>
+<li><p>找到动态库所在的绝对路径（不包括库的名字）比如：/home/jia/code/</p>
 </li>
-<li>
-<p>修改/etc/ld.so.conf这个文件，将上边的路径添加到文件中（独自占一行）</p>
+<li><p>修改/etc/ld.so.conf这个文件，将上边的路径添加到文件中（独自占一行）</p>
 </li>
-<li>
-<p>更新/etc/ld.so.conf中的数据到/etc/ld.so.cache中</p>
+<li><p>更新/etc/ld.so.conf中的数据到/etc/ld.so.cache中</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ldconfig</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <p>方案3：拷贝动态库文件到系统目录/lib或者/usr/lib中，或者软链接</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">库拷贝</span></span><br><span class="line">sudo cp /xxx/xxx/libxxx.so /usr/lib</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建软连接</span></span><br><span class="line">sudo ln -s /xxx/xxx/libxxx.so /usr/lib/libxxx.so</span><br></pre></td></tr></table></figure>
-<h5 id="2-2-4-验证">2.2.4 验证</h5>
-<p>在启动可执行程序之前, 或者在设置了动态库路径之后, 我们可以通过一个命令检测程序能不能够通过动态链接器加载到对应的动态库, 这个命令叫做 ldd</p>
+<h5 id="2-2-4-验证"><a href="#2-2-4-验证" class="headerlink" title="2.2.4 验证"></a>2.2.4 验证</h5><p>在启动可执行程序之前, 或者在设置了动态库路径之后, 我们可以通过一个命令检测程序能不能够通过动态链接器加载到对应的动态库, 这个命令叫做 ldd</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">语法:</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">ldd 可执行程序名</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">举例:</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">ldd app</span></span><br><span class="line">	linux-vdso.so.1 =&gt;  (0x00007ffe8fbd6000)</span><br><span class="line">    libcalc.so =&gt; /home/robin/Linux/3Day/calc/test/libcalc.so (0x00007f5d85dd4000)</span><br><span class="line">    libc.so.6 =&gt; /lib/x86_64-linux-gnu/libc.so.6 (0x00007f5d85a0a000)</span><br><span class="line">    /lib64/ld-linux-x86-64.so.2 (0x00007f5d85fd6000)  ==&gt; 动态链接器, 操作系统提供</span><br></pre></td></tr></table></figure>
 <img src="/2024/07/19/Linux%E9%9D%99%E6%80%81%E5%BA%93%E5%92%8C%E5%8A%A8%E6%80%81%E5%BA%93/3.png" class="" title="3.png">
-<h3 id="3-优缺点">3. 优缺点</h3>
-<h4 id="3-1-静态库">3.1 静态库</h4>
-<p>优点</p>
+<h3 id="3-优缺点"><a href="#3-优缺点" class="headerlink" title="3. 优缺点"></a>3. 优缺点</h3><h4 id="3-1-静态库"><a href="#3-1-静态库" class="headerlink" title="3.1 静态库"></a>3.1 静态库</h4><p>优点</p>
 <ul>
 <li>静态库被打包到应用程序中，加载速度快</li>
 <li>发布程序无需提供静态库，移植方便</li>
@@ -380,8 +348,7 @@
 <li>库文件更新需要重新编译项目文件，生成新的可执行程序，浪费时间</li>
 </ul>
 <img src="/2024/07/19/Linux%E9%9D%99%E6%80%81%E5%BA%93%E5%92%8C%E5%8A%A8%E6%80%81%E5%BA%93/a2.png" class="" title="a2.png">
-<h4 id="3-2-动态库">3.2 动态库</h4>
-<p>优点：</p>
+<h4 id="3-2-动态库"><a href="#3-2-动态库" class="headerlink" title="3.2 动态库"></a>3.2 动态库</h4><p>优点：</p>
 <ul>
 <li>可实现不同进程间的资源共享</li>
 <li>动态库升级简单, 只需要替换库文件, 无需重新编译应用程序</li>
@@ -489,7 +456,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-count">17</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
