@@ -1428,6 +1428,45 @@ CoT 应当被用于 20B 以上参数规模的模型之中，并且模型的训�
 <p><a href="https://mp.weixin.qq.com/s?__biz=MzUyNzcyNzE0Mg==&amp;mid=2247505347&amp;idx=2&amp;sn=9e14de38dba884374e6ef54322107ff1&amp;chksm=fa79ba8acd0e339c4ddf7a5d8c1e2693864363c45fd35e7499742e8ed6e7e139b4c8997dbc4d#rd">【Pytorch 】笔记六：初始化与 18 种损失函数的源码解析 (qq.com)</a></p>
 <h4 id="11、优化器">11、优化器</h4>
 <p><a href="https://zhuanlan.zhihu.com/p/416979875">收藏版｜史上最全机器学习优化器Optimizer汇总 - 知乎 (zhihu.com)</a></p>
+<p><strong>梯度下降</strong></p>
+<ul>
+<li>
+<p>批量梯度下降法 (Batch Gradient Descent, BGD)：这里的批量指整个训练集的数据，每一步更新需要使用全部样本，收敛会比较稳定，但是每一步更新都用到全部的数据，计算太慢了，这应该是理想的最优解。</p>
+</li>
+<li>
+<p>随机梯度下降（Stochastic Gradient Descent, SGD）:每次只选一个样本更计算，速度快，包含随机性，收敛会震荡，引入噪声。关于这里噪声的引入，我的理解是只要不是BGD，都会有一定噪声？然后学习率的波动，也会导致一定的噪声?</p>
+<p>可以看到上面这两种是两个极端，SGD梯度波动会很大，也容易从一个局部最优跳到另一个局部最优，不保证最优解。</p>
+</li>
+<li>
+<p>小批量梯度下降法（Mini-batch Gradient Descent, MBGD or SGD）:上述两种方式的折中，每次随机选<mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.025ex;" xmlns="http://www.w3.org/2000/svg" width="1.986ex" height="1.025ex" role="img" focusable="false" viewBox="0 -442 878 453"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D45A" d="M21 287Q22 293 24 303T36 341T56 388T88 425T132 442T175 435T205 417T221 395T229 376L231 369Q231 367 232 367L243 378Q303 442 384 442Q401 442 415 440T441 433T460 423T475 411T485 398T493 385T497 373T500 364T502 357L510 367Q573 442 659 442Q713 442 746 415T780 336Q780 285 742 178T704 50Q705 36 709 31T724 26Q752 26 776 56T815 138Q818 149 821 151T837 153Q857 153 857 145Q857 144 853 130Q845 101 831 73T785 17T716 -10Q669 -10 648 17T627 73Q627 92 663 193T700 345Q700 404 656 404H651Q565 404 506 303L499 291L466 157Q433 26 428 16Q415 -11 385 -11Q372 -11 364 -4T353 8T350 18Q350 29 384 161L420 307Q423 322 423 345Q423 404 379 404H374Q288 404 229 303L222 291L189 157Q156 26 151 16Q138 -11 108 -11Q95 -11 87 -5T76 7T74 17Q74 30 112 181Q151 335 151 342Q154 357 154 369Q154 405 129 405Q107 405 92 377T69 316T57 280Q55 278 41 278H27Q21 284 21 287Z"></path></g></g></g></svg></mjx-container>个样本更新梯度。</p>
+</li>
+</ul>
+<p>梯度下降公式中，主要是学习率和梯度，针对这两者的改进，衍生出了很多方法。</p>
+<p><strong>Momentum</strong>：引入物理学的动量概念。参数更新时在一定程度上保留之前更新的方向，同时又利用当前batch的梯度微调最终的更新方向，简言之就是通过积累之前的动量来 (previous_sum_of_gradient) 加速当前的梯度。</p>
+<p>主要解决SGD的两个问题：</p>
+<ul>
+<li>随机梯度的方法（引入的噪声）</li>
+<li>Hessian矩阵病态问题（可以理解为SGD在收敛过程中和正确梯度相比来回摆动比较大的问题）</li>
+</ul>
+<p><strong>优点</strong>：</p>
+<p>前后梯度一致的时候能够加速学习；前后梯度不一致的时候能够抑制震荡，越过局部极小值（加速收敛，减小震荡）</p>
+<p><strong>缺点</strong>：</p>
+<p>增加了一个超参数</p>
+<p><strong>NAG（Nesterov accelerated gradient）</strong>：对Momentum进行改进，考虑上一时刻的动量</p>
+<p>传统的优化算法要么将学习率设置为常数要么根据训练次数调节学习率。往往忽视了学习率其他变化的可能性</p>
+<blockquote>
+<p>先来看一下使用统一的全局学习率的缺点可能出现的问题</p>
+</blockquote>
+<ul>
+<li>对于某些参数，通过算法已经优化到了极小值附近，但是有的参数仍然有着很大的梯度。</li>
+<li>如果学习率太小，则梯度很大的参数会有一个很慢的收敛速度； 如果学习率太大，则已经优化得差不多的参数可能会出现不稳定的情况。 解决方案：</li>
+<li>对每个参与训练的参数设置不同的学习率，在整个学习过程中通过一些算法自动适应这些参数的学习率。 如果损失与某一指定参数的偏导的符号相同，那么学习率应该增加； 如果损失与该参数的偏导的符号不同，那么学习率应该减小。</li>
+</ul>
+<p>自适应学习率算法主要有：AdaGrad算法，RMSProp算法，Adam算法以及AdaDelta算法等</p>
+<p>Adagrad其实是对学习率进行了一个约束，对于经常更新的参数，我们已经积累了大量关于它的知识，不希望被单个样本影响太大，希望学习速率慢一些；对于偶尔更新的参数，我们了解的信息太少，希望能从每个偶然出现的样本（稀疏特征的样本）身上多学一些，即学习速率大一些。而该方法中开始使用二阶动量，才意味着“自适应学习率”优化算法时代的到来。独立地适应所有模型参数的学习率，缩放每个参数反比于其<strong>所有梯度历史平均值总和的平方根</strong>。</p>
+<p>AdaDelta：Adagrad改进，只考虑一段窗口类的历史梯度和</p>
+<p>RMSprop：RMSprop算是Adagrad的一种发展，和Adadelta的变体，效果趋于二者之间</p>
+<p>Adam 除了像 Adadelta 和 RMSprop 一样存储了过去梯度的平方 vt 的指数衰减平均值 ，也像 momentum 一样保持了过去梯度 mt 的指数衰减平均值：</p>
 <h4 id="12、RoPE">12、RoPE</h4>
 <p><a href="https://zhuanlan.zhihu.com/p/647109286">十分钟读懂旋转编码（RoPE） - 知乎 (zhihu.com)</a></p>
 <p><a href="https://zhuanlan.zhihu.com/p/642884818">一文看懂 LLaMA 中的旋转式位置编码（Rotary Position Embedding） - 知乎 (zhihu.com)</a></p>
@@ -1596,6 +1635,24 @@ GPT4的词汇表大约是GPT2的两倍，词表越大，同样的文本，编码
 <p>encode：在encode的过程中，实际上就是将输入文本，首先根据utf-8得到对应的序列ids，每个元素都是0-255的，然后通过一个while循环，不断的把这个ids序列，通过get_stats函数，拿到两两pair的频率对，然后我们找到pair中，每个pair生成的新token编号最小的那个，然后将通过merges字典找到这个新token的编号，然后进行merge操作，就是序列ids的长度，直到不能再压缩为止。其实encode的过程就是一个压缩的过程，我们需要尽可能的压缩序列。</p>
 <p>decode：decode的过程就跟encode刚好反过来，我们通过传入的ids序列编号，通过vocab字典，拼接成一个字节编码文本，<strong>然后将这个字节编码文本进行python的内置decode操作，恢复成对应的文本</strong></p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> minbpe <span class="keyword">import</span> BasicTokenizer</span><br><span class="line"></span><br><span class="line">text = <span class="built_in">open</span>(<span class="string">"tests/taylorswift.txt"</span>, <span class="string">"r"</span>, encoding=<span class="string">"utf-8"</span>).read()</span><br><span class="line">tokenizer = BasicTokenizer()</span><br><span class="line">tokenizer.train(text, vocab_size=<span class="number">512</span>)</span><br><span class="line"></span><br><span class="line">tokenizer.encode(<span class="string">"hello world"</span>)  <span class="comment"># string -&gt; tokens  [104, 101, 301, 369, 119, 291, 108, 100]</span></span><br><span class="line"></span><br><span class="line">tokenizer.decode([<span class="number">104</span>, <span class="number">101</span>, <span class="number">301</span>, <span class="number">369</span>, <span class="number">119</span>, <span class="number">291</span>, <span class="number">108</span>, <span class="number">100</span>])  <span class="comment"># tokens -&gt; string  'hello world'</span></span><br></pre></td></tr></table></figure>
+<h2 id="HuggingFace学习笔记">HuggingFace学习笔记</h2>
+<h3 id="Tokenizers">Tokenizers</h3>
+<p>将输入文本，进行编码，转换成模型输入的格式，也就是数组。编码的方式有很多种，编码直接影响模型的能力。</p>
+<p>编码包括两部分</p>
+<h4 id="Tokenization">Tokenization</h4>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> AutoTokenizer</span><br><span class="line"></span><br><span class="line">tokenizer = AutoTokenizer.from_pretrained(<span class="string">"bert-base-cased"</span>)</span><br><span class="line"></span><br><span class="line">sequence = <span class="string">"Using a Transformer network is simple"</span></span><br><span class="line">tokens = tokenizer.tokenize(sequence)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(tokens)</span><br><span class="line">[<span class="string">'Using'</span>, <span class="string">'a'</span>, <span class="string">'transform'</span>, <span class="string">'##er'</span>, <span class="string">'network'</span>, <span class="string">'is'</span>, <span class="string">'simple'</span>]</span><br></pre></td></tr></table></figure>
+<h4 id="From-tokens-to-input-IDs">From tokens to input IDs</h4>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">ids = tokenizer.convert_tokens_to_ids(tokens)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(ids)</span><br><span class="line">[<span class="number">7993</span>, <span class="number">170</span>, <span class="number">11303</span>, <span class="number">1200</span>, <span class="number">2443</span>, <span class="number">1110</span>, <span class="number">3014</span>]</span><br></pre></td></tr></table></figure>
+<p>也可以直接encode得到ids，而解码decoding刚好与编码相反</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">decoded_string = tokenizer.decode([<span class="number">7993</span>, <span class="number">170</span>, <span class="number">11303</span>, <span class="number">1200</span>, <span class="number">2443</span>, <span class="number">1110</span>, <span class="number">3014</span>])</span><br><span class="line"><span class="built_in">print</span>(decoded_string)</span><br><span class="line"><span class="string">'Using a Transformer network is simple'</span></span><br></pre></td></tr></table></figure>
+<p>其实关于编码，我们最终都是通过bytes函数编码成字节序列。</p>
+<p>在看Qwen或者其他模型的vocab.json的时候，你会发现，里面没有一个汉字，是因为表现出来的是<strong>字节码</strong>对应的字符形式（也不知道这样描述对不对），如果我们把这些字符一个一个的还原成\x形式的编码，三个一组，其实就是对应那个汉字的字节码。</p>
+<p>以Qwen2.5为例  notebook代码如下</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> AutoTokenizer</span><br><span class="line">tokenizer = AutoTokenizer.from_pretrained(<span class="string">'qwen\Qwen2___5-7B-Instruct'</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">text3 = <span class="string">"好"</span></span><br><span class="line">tokens = tokenizer.tokenize(text3)</span><br><span class="line">ids = tokenizer.convert_tokens_to_ids(tokens)</span><br><span class="line"><span class="built_in">print</span>(tokens)</span><br><span class="line"><span class="built_in">print</span>(ids)</span><br><span class="line"><span class="built_in">print</span>(text3.encode(<span class="string">'utf-8'</span>))</span><br><span class="line">-------------------------------------------</span><br><span class="line">[<span class="string">'å¥½'</span>]</span><br><span class="line">[<span class="number">52801</span>]</span><br><span class="line"><span class="string">b'\xe5\xa5\xbd'</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">text = <span class="string">'å¥½'</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">len</span>(text))</span><br><span class="line"><span class="built_in">print</span>(tokenizer.decode([<span class="number">56568</span>]))</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">bytes</span>(<span class="string">'\xe5\xa5\xbd'</span>, encoding=<span class="string">'utf-8'</span>))  <span class="comment"># 这一行是我实验乱写的</span></span><br><span class="line">-------------------------------------------</span><br><span class="line"><span class="number">3</span></span><br><span class="line">你</span><br><span class="line"><span class="string">b'\xc3\xa5\xc2\xa5\xc2\xbd'</span>  </span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="built_in">bytes</span>())</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">bytes</span>(<span class="string">"I love python"</span>, encoding=<span class="string">'utf-8'</span>))</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">bytes</span>(<span class="number">11</span>))</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">bytes</span>([<span class="number">1</span>, <span class="number">2</span>, <span class="number">33</span>]),<span class="built_in">len</span>(<span class="built_in">bytes</span>([<span class="number">1</span>, <span class="number">2</span>, <span class="number">33</span>])))</span><br><span class="line">-------------------------------------------</span><br><span class="line"><span class="string">b''</span></span><br><span class="line"><span class="string">b'I love python'</span></span><br><span class="line"><span class="string">b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'</span></span><br><span class="line"><span class="string">b'\x01\x02!'</span> <span class="number">3</span></span><br></pre></td></tr></table></figure>
+<p>为什么是一个!呢？其实就是因为在ASCII或者unicode里面，33就对应感叹号！总之，bytes函数参数很多，把bytes函数弄懂就行了！</p>
 ]]></content>
       <categories>
         <category>LLM</category>
