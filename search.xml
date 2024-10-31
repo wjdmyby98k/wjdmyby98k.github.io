@@ -1635,8 +1635,8 @@ GPT4的词汇表大约是GPT2的两倍，词表越大，同样的文本，编码
 <p>encode：在encode的过程中，实际上就是将输入文本，首先根据utf-8得到对应的序列ids，每个元素都是0-255的，然后通过一个while循环，不断的把这个ids序列，通过get_stats函数，拿到两两pair的频率对，然后我们找到pair中，每个pair生成的新token编号最小的那个，然后将通过merges字典找到这个新token的编号，然后进行merge操作，就是序列ids的长度，直到不能再压缩为止。其实encode的过程就是一个压缩的过程，我们需要尽可能的压缩序列。</p>
 <p>decode：decode的过程就跟encode刚好反过来，我们通过传入的ids序列编号，通过vocab字典，拼接成一个字节编码文本，<strong>然后将这个字节编码文本进行python的内置decode操作，恢复成对应的文本</strong></p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> minbpe <span class="keyword">import</span> BasicTokenizer</span><br><span class="line"></span><br><span class="line">text = <span class="built_in">open</span>(<span class="string">"tests/taylorswift.txt"</span>, <span class="string">"r"</span>, encoding=<span class="string">"utf-8"</span>).read()</span><br><span class="line">tokenizer = BasicTokenizer()</span><br><span class="line">tokenizer.train(text, vocab_size=<span class="number">512</span>)</span><br><span class="line"></span><br><span class="line">tokenizer.encode(<span class="string">"hello world"</span>)  <span class="comment"># string -&gt; tokens  [104, 101, 301, 369, 119, 291, 108, 100]</span></span><br><span class="line"></span><br><span class="line">tokenizer.decode([<span class="number">104</span>, <span class="number">101</span>, <span class="number">301</span>, <span class="number">369</span>, <span class="number">119</span>, <span class="number">291</span>, <span class="number">108</span>, <span class="number">100</span>])  <span class="comment"># tokens -&gt; string  'hello world'</span></span><br></pre></td></tr></table></figure>
-<h2 id="HuggingFace学习笔记">HuggingFace学习笔记</h2>
-<h3 id="Tokenizers">Tokenizers</h3>
+<h3 id="HuggingFace学习笔记">HuggingFace学习笔记</h3>
+<h4 id="Tokenizers">Tokenizers</h4>
 <p>将输入文本，进行编码，转换成模型输入的格式，也就是数组。编码的方式有很多种，编码直接影响模型的能力。</p>
 <p>编码包括两部分</p>
 <h4 id="Tokenization">Tokenization</h4>
