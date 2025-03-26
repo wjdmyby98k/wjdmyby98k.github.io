@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"wjdmyby98k.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="openManus代码解析">
+<meta property="og:type" content="article">
+<meta property="og:title" content="openManus解读">
+<meta property="og:url" content="https://wjdmyby98k.github.io/2025/03/26/openManus%E8%A7%A3%E8%AF%BB/index.html">
+<meta property="og:site_name" content="就是要摸鱼">
+<meta property="og:description" content="openManus代码解析">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-03-26T14:01:14.000Z">
+<meta property="article:modified_time" content="2025-03-26T14:08:06.617Z">
+<meta property="article:author" content="zhangyitao">
+<meta property="article:tag" content="LLM">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://wjdmyby98k.github.io/2025/03/26/openManus%E8%A7%A3%E8%AF%BB/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>openManus解读 | 就是要摸鱼</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">就是要摸鱼</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wjdmyby98k.github.io/2025/03/26/openManus%E8%A7%A3%E8%AF%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhangyitao">
+      <meta itemprop="description" content="一切过往，皆为序曲">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="就是要摸鱼">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          openManus解读
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2025-03-26 22:01:14 / 修改时间：22:08:06" itemprop="dateCreated datePublished" datetime="2025-03-26T22:01:14+08:00">2025-03-26</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LLM/" itemprop="url" rel="index"><span itemprop="name">LLM</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">openManus代码解析</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1>openmanus</h1>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/692336625">OpenAI API格式详解-Chat Completions - 知乎</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/685355104">浅聊大模型（LLM）的工具调用（Function Call） - 知乎</a></p>
+<p>function call，OpenAI没有开源数据构造格式，这种能力也是通过数据训练出来的。</p>
+<p>config.toml  (参考阿里云百炼，其他的API调用基本都是类似的思路，在公司记得加http_client=httpx.AsyncClient(verify=False))</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Global LLM configuration</span></span><br><span class="line">[llm]</span><br><span class="line">model = &quot;qwen-long&quot;        # The LLM model to use</span><br><span class="line">base_url = &quot;https://dashscope.aliyuncs.com/compatible-mode/v1&quot;  # API endpoint URL</span><br><span class="line">api_key = &quot;sk-xxxxxx&quot;                    # Your API key</span><br><span class="line">max_tokens = 8192                           # Maximum number of tokens in the response</span><br><span class="line">temperature = 0.0                           # Controls randomness</span><br></pre></td></tr></table></figure>
+<p>两种模式，分别是稳定版本和开发版本，对应main.py和run_flow.py</p>
+<h2 id="main-py调用链路">main.py调用链路</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">main.py</span><br><span class="line">    --&gt;manus.run()</span><br><span class="line">        --&gt;while</span><br><span class="line">            --&gt;step()</span><br><span class="line">                --&gt;think()         manus.think()--&gt;ToolCallAgent.think()</span><br><span class="line">                --&gt;act()	       ToolCallAgent.act()</span><br><span class="line">            --&gt;self.is_stuck()</span><br><span class="line">        --&gt;return results</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">manus.think()</span><br><span class="line">	--&gt;self.get_browser_state() 初次是只有一个ToolResult.error</span><br><span class="line">		--&gt;super.think()  ToolCallAgent.think()</span><br><span class="line">			--&gt;self.llm.ask_tool</span><br><span class="line">				--&gt;self.client.chat.completions.create(**params).choices[0].message</span><br><span class="line">			--&gt;self.memory.add_message(assistant_msg)</span><br><span class="line">        --&gt;ToolCallAgent.act()</span><br><span class="line">        	for loop</span><br><span class="line">                --&gt;self.execute_tool(command)</span><br><span class="line">                    --&gt;json.loads</span><br><span class="line">                    --&gt;self.available_tools.execute</span><br><span class="line">                    --&gt;PythonExecute.execute  开启子进程+timeout</span><br><span class="line">                        --&gt;PythonExecute._run_code</span><br><span class="line">                    --&gt;self._handle_special_tool  判断是不是特殊工具，只有terminate是</span><br><span class="line">                --&gt;self.memory.add_message(tool_msg)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="run-flow-py调用链路">run_flow.py调用链路</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">PlanningFlow(agents=agents) 构造函数完成赋值，注意data字典在不断扩充，最终调用baseModel的构造完成赋值</span><br><span class="line">PlanningFlow.execute(prompt)</span><br><span class="line">	--&gt;self._create_initial_plan(input_text)</span><br><span class="line">		--&gt;self.llm.ask_tool</span><br><span class="line">		--&gt;self.planning_tool.execute(**args)</span><br><span class="line">		--&gt;self.plans[plan_id]进行一系列修改</span><br><span class="line">    --&gt;while</span><br><span class="line">        --&gt;self._get_current_step_info()</span><br><span class="line">        	--&gt;return i, step_info   这里返回每次第一个未完成的index和step_info，step_info就是包含steps[i]的字典</span><br><span class="line">        --&gt;self.get_executor</span><br><span class="line">        --&gt;self._execute_step</span><br><span class="line">    --&gt;return results</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">self._execute_step</span><br><span class="line">	--&gt;self._get_plan_text()</span><br><span class="line">	--&gt;generate step_prompt</span><br><span class="line">	--&gt;executor.run(step_prompt)  其实就是agent.run,对应前面写的manus.run,这里会进行一系列的step，直到finish</span><br><span class="line">	--&gt;self._mark_step_completed()</span><br></pre></td></tr></table></figure>
+<p>值得注意的点</p>
+<ul>
+<li>
+<p>每次调用self.llm.ask_tool的时候，有一个参数是self.messages，这玩意其实就是self.memory.messages，那么一切就解释的通了，self.memory维护所有的历史对话记录</p>
+</li>
+<li>
+<p>第一次think里面拿到的response.content为空，因为第一次只选工具</p>
+</li>
+<li>
+<p>文本tokens计算直接调用tiktoken计算，图像tokens计算采用固定的公式（未开源）</p>
+</li>
+<li>
+<p>self._get_current_step_info()拿到的step_info会根据[]去提取type字段，然后决定用哪一个agent，否则用默认的</p>
+</li>
+<li>
+<p>项目中的字典查看太麻烦，其实是python的字典，用black工具格式化看</p>
+</li>
+<li>
+<p>think的每一轮，都会更新memory，在开头加user的message，在末尾加assistant的message</p>
+</li>
+<li>
+<p>在执行async with self.state_context(AgentState.RUNNING)的时候，内部self.step()可能会讲self.state设置为AgentState.FINISHED，但是循环仍然继续，猜测就是这个异步上下文在起作用，保证状态不发生变化！</p>
+</li>
+</ul>
+<p>整体逻辑：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">prompt--&gt;steps</span><br><span class="line">	--&gt;for step in steps</span><br><span class="line">		--&gt;think--&gt;act--&gt;think-------until finish</span><br></pre></td></tr></table></figure>
+<h2 id="Config模块">Config模块</h2>
+<p>app/config.py</p>
+<p>这块没什么好说的，就是解析toml文件</p>
+<p><a target="_blank" rel="noopener" href="http://llm.py">llm.py</a>：tokens数量计算、format_messages消息格式的转换，区分了两种type，text和image_url，ask添加retry重连机制等，ask默认是Steam流式处理，流式和非流式有不同的处理方式。ask_with_images和ask_tool都是类似的处理方式，但是tool不支持流式。</p>
+<p>openManus虽然只有基础的功能，但是agent框架、API调用、Pytantic校验都值得学习。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/LLM/" rel="tag"># LLM</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/10/30/%E4%B8%80%E4%BA%9BLLM%E6%80%BB%E7%BB%93/" rel="prev" title="一些LLM总结">
+      <i class="fa fa-chevron-left"></i> 一些LLM总结
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">openmanus</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#main-py%E8%B0%83%E7%94%A8%E9%93%BE%E8%B7%AF"><span class="nav-text">main.py调用链路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#run-flow-py%E8%B0%83%E7%94%A8%E9%93%BE%E8%B7%AF"><span class="nav-text">run_flow.py调用链路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Config%E6%A8%A1%E5%9D%97"><span class="nav-text">Config模块</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zhangyitao</p>
+  <div class="site-description" itemprop="description">一切过往，皆为序曲</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zhangyitao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
