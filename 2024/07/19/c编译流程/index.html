@@ -214,99 +214,76 @@
         <p>写在前面：由于工作中需要接处到大量c/c++代码，本身python、java出身的我，还是有必要系统了解一下c/c++代码的编译流程。</p>
 <p>以gcc为例，clang的话可以参考这几篇文章</p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_33919450/article/details/130911617">clang到底是什么？gcc和clang到底有什么区别？-CSDN博客</a></p>
-<p><a target="_blank" rel="noopener" href="https://zhonguncle.github.io/blogs/4693280e7d152780ee5ed9d12d080386.html">What is the differences between gcc and Clang/LLVM? (zhonguncle.github.io)</a><br>
-<a target="_blank" rel="noopener" href="https://subingwen.cn/linux/gcc/">GCC | 爱编程的大丙 (subingwen.cn)</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhonguncle.github.io/blogs/4693280e7d152780ee5ed9d12d080386.html">What is the differences between gcc and Clang/LLVM? (zhonguncle.github.io)</a><br><a target="_blank" rel="noopener" href="https://subingwen.cn/linux/gcc/">GCC | 爱编程的大丙 (subingwen.cn)</a></p>
 <p>首先我们得知道编译器到底是什么，或者说是编译什么。通常我们说的编译器，是将源代码转换成可执行程序的程序。比如gcc编译得到可执行程序。在编译原理里面是这样定义的：</p>
 <blockquote>
 <p>简单来说，编译器就是一个程序能读取某种语言的一个程序（这个语言是源语言），然后将其翻译转换成另一种语言的等价程序（这个语言被称为目标语言）。编译器最重要的一个规定就是报告在翻译过程中发现“源”程序的错误。如果这个目标程序是机器语言，那么这个目标程序就是可执行程序。</p>
 </blockquote>
 <p>但其实，<strong>像<code>gcc</code>这种现代“编译器”是一个工具集合，包含了预处理器、编译器，而且会自己调用汇编器、连接器或加载器等多种工具，而不是单单的一个编译器</strong>，按照近几十年的标准编译流程来说，编译器指的是从将<code>.c</code>等文件转换成<code>.s</code>文件的程序。为了方便解释，除非特地说明，下文中的“编译器”都是按这个定义。</p>
-<h3 id="从源代码到可执行文件的过程">从源代码到可执行文件的过程</h3>
-<img src="/2024/07/19/c%E7%BC%96%E8%AF%91%E6%B5%81%E7%A8%8B/1.png" class="" title="1.png">
+<h3 id="从源代码到可执行文件的过程"><a href="#从源代码到可执行文件的过程" class="headerlink" title="从源代码到可执行文件的过程"></a>从源代码到可执行文件的过程</h3><img src="/2024/07/19/c%E7%BC%96%E8%AF%91%E6%B5%81%E7%A8%8B/1.png" class="" title="1.png">
 <p>可以看到从源代码到可执行程序要经过预处理器（preprocessor）、编译器（compiler）、汇编器（assembler）和连接器（linker）或加载器（loader），而编译器只是负责将源代码转换成对应的汇编代码的功能。</p>
 <p>上面的几种处理转换程序除了编译器和汇编器，其他三个估计都很很少听到。下面就用最经典的 C 语言和<code>gcc</code>来介绍这个过程，<code>gcc</code>包含的预处理器为<code>cpp</code>，还会调用汇编器<code>as</code>、连接器<code>ld</code>。</p>
 <p><code>gcc</code>支持在将源代码转换成可执行程序的过程中的某一步停止，也就是限定终点（如果依次手动操作的话，也就是只进行某一步），我们就先用这个机制来展示整个编译过程。</p>
 <p>比如我有三个文件，为<code>main.c</code>、<code>calc.c</code>和<code>calc.h</code> ，新建build目录，在build目录下测试，方便处理生成文件</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//main.c</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;calc.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MAXNUM 1000</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> a = calc(<span class="number">12</span>, <span class="number">13</span>, <span class="number">14</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (a &gt;= MAXNUM)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Over Limit!\n&quot;</span>);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Result: %d&quot;</span>, a);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//calc.c</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;calc.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">calc</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b, <span class="type">int</span> c)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">return</span> a*b*c;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//calc.h</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">calc</span><span class="params">(<span class="type">int</span>, <span class="type">int</span>, <span class="type">int</span>)</span>;</span><br></pre></td></tr></table></figure>
-<h4 id="1-预处理阶段">1. 预处理阶段</h4>
-<p>首先是预处理源代码，如果需要在预处理之后停止需要使用选项-E：</p>
+<h4 id="1-预处理阶段"><a href="#1-预处理阶段" class="headerlink" title="1. 预处理阶段"></a>1. 预处理阶段</h4><p>首先是预处理源代码，如果需要在预处理之后停止需要使用选项-E：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gcc -E ../calc.c -o calc.i</span><br><span class="line">gcc -E ../main.c -o main.i</span><br></pre></td></tr></table></figure>
 <p>这里需要使用-o来指定输出文件名称，这是因为gcc调用的预处理器cpp会将处理后的内容输出到标准输出，而不是生成某个文件。预处理之后的文件后缀为.i，所以这里把后缀都换成.i。此时使用ls查看如下：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ls</span><br><span class="line">calc.i  main.i</span><br></pre></td></tr></table></figure>
-<h4 id="2-编译阶段">2. 编译阶段</h4>
-<p>接下来是编译阶段。如果你想编译但不进行汇编，那么使用<code>-S</code>选项：</p>
+<h4 id="2-编译阶段"><a href="#2-编译阶段" class="headerlink" title="2. 编译阶段"></a>2. 编译阶段</h4><p>接下来是编译阶段。如果你想编译但不进行汇编，那么使用<code>-S</code>选项：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -S main.i calc.i</span><br></pre></td></tr></table></figure>
 <p>这里会对两个文件进行编译，并生成汇编语言文件，生成文件名是将原文件的<code>.c</code>、<code>.i</code>等后缀替代成<code>.s</code>（因为是从某一步开始，到编译这步停止，不同后缀表示开始的阶段），此时使用<code>ls</code>查看如下：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ls </span><br><span class="line">calc.i  calc.s  main.i  main.s</span><br></pre></td></tr></table></figure>
-<h4 id="3-汇编阶段">3. 汇编阶段</h4>
-<p>接下来是汇编阶段。这里使用选项<code>-c</code>，这个选项是进行编译和汇编，但是不进行连接。上文提到过，是根据后缀判断从整个编译流程的哪一步开始，然后进行到汇编之后、连接之前这个阶段。刚才是进行了编译，但是没有汇编，所以这里使用<code>-c</code>相当于只使用了汇编器：</p>
+<h4 id="3-汇编阶段"><a href="#3-汇编阶段" class="headerlink" title="3. 汇编阶段"></a>3. 汇编阶段</h4><p>接下来是汇编阶段。这里使用选项<code>-c</code>，这个选项是进行编译和汇编，但是不进行连接。上文提到过，是根据后缀判断从整个编译流程的哪一步开始，然后进行到汇编之后、连接之前这个阶段。刚才是进行了编译，但是没有汇编，所以这里使用<code>-c</code>相当于只使用了汇编器：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -c calc.s main.s</span><br></pre></td></tr></table></figure>
 <p>和<code>-S</code>选项一样，它会自动生成对象文件（object file），文件名为用<code>.o</code>替代掉源文件名的<code>.c</code>、<code>.i</code>、<code>.s</code>等后缀，此时使用<code>ls</code>查看如下：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">calc.i  calc.o  calc.s  main.i  main.o  main.s</span><br></pre></td></tr></table></figure>
-<h4 id="4-连接阶段">4. 连接阶段</h4>
-<p>这是最后的连接阶段，使用<code>-o</code>直接输出即可，因为从汇编之后的对象文件到可执行程序和从源代码到可执行程序这个结果是一样的，<code>gcc</code>这些选项只是限定“终点”。这里我们将输出文件名设定为<code>calc</code>：</p>
+<h4 id="4-连接阶段"><a href="#4-连接阶段" class="headerlink" title="4. 连接阶段"></a>4. 连接阶段</h4><p>这是最后的连接阶段，使用<code>-o</code>直接输出即可，因为从汇编之后的对象文件到可执行程序和从源代码到可执行程序这个结果是一样的，<code>gcc</code>这些选项只是限定“终点”。这里我们将输出文件名设定为<code>calc</code>：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -o calc main.o calc.o</span><br></pre></td></tr></table></figure>
 <p>使用<code>ls</code>看到如下内容：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ls</span><br><span class="line">calc  calc.i  calc.o  calc.s  main.i  main.o  main.s</span><br></pre></td></tr></table></figure>
 <p>这时候我们运行<code>calc</code>看看：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./calc</span><br><span class="line">Over Limit!</span><br></pre></td></tr></table></figure>
 <p>上述流程也可以用cpp、gcc、as、ld依次进行预处理、编译、汇编、连接操作，但是ld的命令会很复杂，实际中不会这样用！这里就不赘述了，细节可以看参考文章。</p>
-<h3 id="gcc介绍">gcc介绍</h3>
-<p>前面我们已经讲过，gcc是一个工具集合，其从源代码到可执行文件的过程中，分为四个阶段，gcc命令可以将这四个步骤合并成一个</p>
+<h3 id="gcc介绍"><a href="#gcc介绍" class="headerlink" title="gcc介绍"></a>gcc介绍</h3><p>前面我们已经讲过，gcc是一个工具集合，其从源代码到可执行文件的过程中，分为四个阶段，gcc命令可以将这四个步骤合并成一个</p>
 <ul>
-<li>
-<p>预处理: 在这个阶段主要做了三件事：展开头文件 、宏替换 、去掉注释行，这个阶段需要gcc调用预处理器来完成， 最终得到的还是源文件, 文本格式</p>
+<li><p>预处理: 在这个阶段主要做了三件事：展开头文件 、宏替换 、去掉注释行，这个阶段需要gcc调用预处理器来完成， 最终得到的还是源文件, 文本格式</p>
 </li>
-<li>
-<p>编译: 这个阶段需要gcc调用编译器对文件进行编译，最终得到一个汇编文件</p>
+<li><p>编译: 这个阶段需要gcc调用编译器对文件进行编译，最终得到一个汇编文件</p>
 </li>
-<li>
-<p>汇编: 这个阶段需要gcc调用汇编器对文件进行汇编，最终得到一个二进制文件</p>
+<li><p>汇编: 这个阶段需要gcc调用汇编器对文件进行汇编，最终得到一个二进制文件</p>
 </li>
-<li>
-<p>链接: 这个阶段需要gcc调用链接器对程序需要调用的库进行链接， 最终得到一个可执行的二进制文件</p>
+<li><p>链接: 这个阶段需要gcc调用链接器对程序需要调用的库进行链接， 最终得到一个可执行的二进制文件</p>
 </li>
 </ul>
-<h4 id="gcc常用参数">gcc常用参数</h4>
-<img src="/2024/07/19/c%E7%BC%96%E8%AF%91%E6%B5%81%E7%A8%8B/2.png" class="" title="2.png">
-<h4 id="gcc和g-区别">gcc和g++区别</h4>
-<ul>
-<li>
-<p>在代码编译阶段（第二个阶段）:</p>
+<h4 id="gcc常用参数"><a href="#gcc常用参数" class="headerlink" title="gcc常用参数"></a>gcc常用参数</h4><img src="/2024/07/19/c%E7%BC%96%E8%AF%91%E6%B5%81%E7%A8%8B/2.png" class="" title="2.png">
+<h4 id="gcc和g-区别"><a href="#gcc和g-区别" class="headerlink" title="gcc和g++区别"></a>gcc和g++区别</h4><ul>
+<li><p>在代码编译阶段（第二个阶段）:</p>
 <ul>
 <li>后缀为 <strong>.c</strong> 的，gcc 把它当作是C程序，而 g++ 当作是 C++ 程序</li>
-<li>后缀为**.cpp**的，两者都会认为是 C++ 程序，C++ 的语法规则更加严谨一些</li>
+<li>后缀为<strong>.cpp</strong>的，两者都会认为是 C++ 程序，C++ 的语法规则更加严谨一些</li>
 <li>g++会调用gcc，对于C++代码，两者是等价的, 也就是说 gcc 和 g++ 都可以编译 C/C++代码</li>
 </ul>
 </li>
-<li>
-<p>在链接阶段（最后一个阶段）:</p>
+<li><p>在链接阶段（最后一个阶段）:</p>
 <ul>
-<li>
-<p>gcc 和 g++ 都可以自动链接到标准C库</p>
+<li><p>gcc 和 g++ 都可以自动链接到标准C库</p>
 </li>
-<li>
-<p>g++ 可以自动链接到标准C++库, gcc如果要链接到标准C++库需要加参数 <strong>-lstdc++</strong></p>
+<li><p>g++ 可以自动链接到标准C++库, gcc如果要链接到标准C++库需要加参数 <strong>-lstdc++</strong></p>
 </li>
 </ul>
 </li>
-<li>
-<p>关于 __cplusplus宏的定义</p>
+<li><p>关于 __cplusplus宏的定义</p>
 <ul>
-<li>
-<p>g++ 会自动定义__cplusplus宏，但是这个不影响它去编译C程序</p>
+<li><p>g++ 会自动定义__cplusplus宏，但是这个不影响它去编译C程序</p>
 </li>
-<li>
-<p>gcc 需要根据文件后缀判断是否需要定义 <strong>__cplusplus</strong> 宏 （规则参考第一条）</p>
+<li><p>gcc 需要根据文件后缀判断是否需要定义 <strong>__cplusplus</strong> 宏 （规则参考第一条）</p>
 </li>
 </ul>
 </li>
 </ul>
 <blockquote>
-<p>综上所述：<br>
-不管是 gcc 还是 g++ 都可以编译 C 程序，编译程序的规则和参数都相同<br>
-g++可以直接编译C++程序， gcc 编译 C++程序需要添加额外参数 -lstdc++<br>
-不管是 gcc 还是 g++ 都可以定义 __cplusplus宏</p>
+<p>综上所述：<br>不管是 gcc 还是 g++ 都可以编译 C 程序，编译程序的规则和参数都相同<br>g++可以直接编译C++程序， gcc 编译 C++程序需要添加额外参数 -lstdc++<br>不管是 gcc 还是 g++ 都可以定义 __cplusplus宏</p>
 </blockquote>
 
     </div>

@@ -214,34 +214,24 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="1-Node">1. Node</h2>
-<p>每个Node包含一个带泛型的&lt;k,v&gt;、记录了当前Node的层级level、记录当前Node从0–&gt;level层下一个Node的数组forward</p>
-<h2 id="2-SkipList">2. SkipList</h2>
-<h3 id="2-1-构造函数">2.1 构造函数</h3>
-<p>SkipList初始化的时候，会设置最大层级max_level，当前的层级_skip_list_level，当前的元素总数_element_count，以及头结点_header；</p>
+        <h2 id="1-Node"><a href="#1-Node" class="headerlink" title="1. Node"></a>1. Node</h2><p>每个Node包含一个带泛型的<k,v>、记录了当前Node的层级level、记录当前Node从0—&gt;level层下一个Node的数组forward</p>
+<h2 id="2-SkipList"><a href="#2-SkipList" class="headerlink" title="2. SkipList"></a>2. SkipList</h2><h3 id="2-1-构造函数"><a href="#2-1-构造函数" class="headerlink" title="2.1 构造函数"></a>2.1 构造函数</h3><p>SkipList初始化的时候，会设置最大层级max_level，当前的层级_skip_list_level，当前的元素总数_element_count，以及头结点_header；</p>
 <p>_header代表跳表对象的头结点，起到类似于一个dummy_node的作用，该Node的level设置为跳表的_max_level；</p>
-<h3 id="2-2-insert-element">2.2 insert_element</h3>
-<ul>
+<h3 id="2-2-insert-element"><a href="#2-2-insert-element" class="headerlink" title="2.2 insert_element"></a>2.2 insert_element</h3><ul>
 <li>首先拿到头结点_header，存在current变量中</li>
 <li>然后创建一个<strong>update</strong>数组，该数组用来记录，每一层可能需要修改操作的结点，具体来说，该结点为每一层最后一个小于需要插入的key的Node 或者 该结点下一个结点为NULL，然后把这个结点记录下来</li>
 <li>由于上面遍历是从顶层往底层遍历的，所以最后这个current一定会回到最底层那里！然后我们拿到这个current在最底层，也就是第0层的下一个Node，如果说下一个Node存在，且key就是需要插入的key，就表明需要插入的Node是存在的。然后返回1即可</li>
-<li>否则，表面需要插入新的Node，首先通过get_random_level函数得到一个随机的层数level，如果大于跳表当前的层数_skip_list_level，就将前面设置的<strong>update</strong>数组，从新加的层的索引开始初始化，为头结点，（实际上<strong>update</strong>数组的大小为跳表的最大层级_max_level）然后我们更新当前的跳表层数。接着创建需要插入的结点inserted_node，然后插入到跳表中，从0–&gt;random_level，每一层都插一遍，我们前面记录了每一层最后一个小于当前inserted_node的结点，存在<strong>update</strong>数组中，插入就是在每个<strong>update</strong>数组记录的Node后面插一个新Node即可。<font color = red>注意这里有两个赋值，其实就是链表的插入，我们不仅考虑当前的Node，还要考虑Node后一个Node</font></li>
+<li>否则，表面需要插入新的Node，首先通过get_random_level函数得到一个随机的层数level，如果大于跳表当前的层数_skip_list_level，就将前面设置的<strong>update</strong>数组，从新加的层的索引开始初始化，为头结点，（实际上<strong>update</strong>数组的大小为跳表的最大层级_max_level）然后我们更新当前的跳表层数。接着创建需要插入的结点inserted_node，然后插入到跳表中，从0—&gt;random_level，每一层都插一遍，我们前面记录了每一层最后一个小于当前inserted_node的结点，存在<strong>update</strong>数组中，插入就是在每个<strong>update</strong>数组记录的Node后面插一个新Node即可。<font color = red>注意这里有两个赋值，其实就是链表的插入，我们不仅考虑当前的Node，还要考虑Node后一个Node</font></li>
 <li>插入完成_element_count++</li>
 </ul>
-<h3 id="2-3-display-list">2.3 display_list</h3>
-<p>遍历每一层，根据_header拿到每一层的下一个Node，然后一直取该Node在当前层的下一个Node，循环遍历直到NULL</p>
-<h3 id="2-4-dump-file">2.4 dump_file</h3>
-<p>将跳表数据存在磁盘中，通过std::ofstream _file_writer去写，<font color=red>只写最后一层</font></p>
-<h3 id="2-5-load-file">2.5 load_file</h3>
-<p>根据上面存在磁盘中的文件，把所有的Node重新写入到跳表中，<font color=red>由于每次插入会给每个Node随机创建一个level，</font>所以生成的跳表，和上面落盘的跳表，在结构上可能不一致</p>
-<h3 id="2-6-delete-element">2.6 delete_element</h3>
-<p>删除元素和插入元素的操作类似。拿到<strong>update</strong>数组和current以后，看看最底层的下一个Node，是不是存在且key相等。存在且相等，就代表需要删除，然后从0–&gt;_skip_list_level，每一层都删一下，<font color = red>具体操作为，遍历每一层，看看<strong>update</strong>数组在当前层的下一个Node，是否和需要删除的Current相等。相等才删除。不删除就代表该层不存在需要删除的Node，删完以后，再通过header遍历一下每一层的Node，看看是不是有的层为空，为空的话，更新当前跳表的层级–</font></p>
-<h3 id="2-7-search-element">2.7 search_element</h3>
-<p>搞清楚前面的插入以后，搜索元素就很简单了，不需要<strong>update</strong>数组，直接遍历到最底层，找到最底层最后一个 &lt; key的Node，也就是current，然后该Node的下一个Node是否和搜索的key相等，再判断存不存在</p>
-<h3 id="2-8-clear">2.8 clear</h3>
-<p><font color=red>其实跳表中每个具有相同key的结点对象，都是同一个，所以我们只需要删除最底层的即可。这里clear是将传进来的cur，以及cur后面的每一个Node都删除掉</font></p>
-<h3 id="2-9-析构函数">2.9 析构函数</h3>
-<p>搞清楚了clear以后，析构其实就是将最底层的第一个元素作为cur传给clear，这样就会将最底层所有的元素都删一遍</p>
+<h3 id="2-3-display-list"><a href="#2-3-display-list" class="headerlink" title="2.3 display_list"></a>2.3 display_list</h3><p>遍历每一层，根据_header拿到每一层的下一个Node，然后一直取该Node在当前层的下一个Node，循环遍历直到NULL</p>
+<h3 id="2-4-dump-file"><a href="#2-4-dump-file" class="headerlink" title="2.4 dump_file"></a>2.4 dump_file</h3><p>将跳表数据存在磁盘中，通过std::ofstream _file_writer去写，<font color=red>只写最后一层</font></p>
+<h3 id="2-5-load-file"><a href="#2-5-load-file" class="headerlink" title="2.5 load_file"></a>2.5 load_file</h3><p>根据上面存在磁盘中的文件，把所有的Node重新写入到跳表中，<font color=red>由于每次插入会给每个Node随机创建一个level，</font>所以生成的跳表，和上面落盘的跳表，在结构上可能不一致</p>
+<h3 id="2-6-delete-element"><a href="#2-6-delete-element" class="headerlink" title="2.6 delete_element"></a>2.6 delete_element</h3><p>删除元素和插入元素的操作类似。拿到<strong>update</strong>数组和current以后，看看最底层的下一个Node，是不是存在且key相等。存在且相等，就代表需要删除，然后从0—&gt;_skip_list_level，每一层都删一下，<font color = red>具体操作为，遍历每一层，看看<strong>update</strong>数组在当前层的下一个Node，是否和需要删除的Current相等。相等才删除。不删除就代表该层不存在需要删除的Node，删完以后，再通过header遍历一下每一层的Node，看看是不是有的层为空，为空的话，更新当前跳表的层级—</font></p>
+<h3 id="2-7-search-element"><a href="#2-7-search-element" class="headerlink" title="2.7 search_element"></a>2.7 search_element</h3><p>搞清楚前面的插入以后，搜索元素就很简单了，不需要<strong>update</strong>数组，直接遍历到最底层，找到最底层最后一个 &lt; key的Node，也就是current，然后该Node的下一个Node是否和搜索的key相等，再判断存不存在</p>
+<h3 id="2-8-clear"><a href="#2-8-clear" class="headerlink" title="2.8 clear"></a>2.8 clear</h3><font color=red>其实跳表中每个具有相同key的结点对象，都是同一个，所以我们只需要删除最底层的即可。这里clear是将传进来的cur，以及cur后面的每一个Node都删除掉</font>
+
+<h3 id="2-9-析构函数"><a href="#2-9-析构函数" class="headerlink" title="2.9 析构函数"></a>2.9 析构函数</h3><p>搞清楚了clear以后，析构其实就是将最底层的第一个元素作为cur传给clear，这样就会将最底层所有的元素都删一遍</p>
 
     </div>
 
