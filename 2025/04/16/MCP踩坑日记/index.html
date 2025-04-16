@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"wjdmyby98k.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="关于MCP的一些坑">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MCP踩坑日记">
+<meta property="og:url" content="https://wjdmyby98k.github.io/2025/04/16/MCP%E8%B8%A9%E5%9D%91%E6%97%A5%E8%AE%B0/index.html">
+<meta property="og:site_name" content="就是要摸鱼">
+<meta property="og:description" content="关于MCP的一些坑">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-04-16T12:03:07.000Z">
+<meta property="article:modified_time" content="2025-04-16T12:05:56.632Z">
+<meta property="article:author" content="zhangyitao">
+<meta property="article:tag" content="LLM">
+<meta property="article:tag" content="Agent">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://wjdmyby98k.github.io/2025/04/16/MCP%E8%B8%A9%E5%9D%91%E6%97%A5%E8%AE%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>MCP踩坑日记 | 就是要摸鱼</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">就是要摸鱼</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wjdmyby98k.github.io/2025/04/16/MCP%E8%B8%A9%E5%9D%91%E6%97%A5%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhangyitao">
+      <meta itemprop="description" content="一切过往，皆为序曲">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="就是要摸鱼">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          MCP踩坑日记
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2025-04-16 20:03:07 / 修改时间：20:05:56" itemprop="dateCreated datePublished" datetime="2025-04-16T20:03:07+08:00">2025-04-16</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LLM/" itemprop="url" rel="index"><span itemprop="name">LLM</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Agent/" itemprop="url" rel="index"><span itemprop="name">Agent</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">关于MCP的一些坑</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1>关于MCP的一些坑</h1>
+<p><a target="_blank" rel="noopener" href="https://docs.anthropic.com/zh-CN/api/getting-started">入门指南 - Anthropic</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_61525039/article/details/146404984">实战解析MCP-使用本地的Qwen-2.5模型-AI协议的未来？_qwen mcp-CSDN博客</a></p>
+<p><a target="_blank" rel="noopener" href="https://shansan.top/2025/03/23/build-agent-with-mcp-agent-and-qwen/">使用 mcp-agent 框架和百炼通义千问大模型构建基于 MCP 协议的网页总结智能代理 (agent) - ShanSan</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/crazymakercircle/article/details/147152891?ops_request_misc=%7B%22request%5Fid%22%3A%22c5de05f8fc95b4875ad97009134fb379%22%2C%22scm%22%3A%2220140713.130102334.pc%5Fall.%22%7D&amp;request_id=c5de05f8fc95b4875ad97009134fb379&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~time_text~default-1-147152891-null-null.142%5Ev102%5Epc_search_result_base8&amp;utm_term=mcp&amp;spm=1018.2226.3001.4187">MCP圣经：从入门到精通，从精通到放弃，理论 + 实践吃透 大火的 MCP 协议-CSDN博客</a></p>
+<p><a target="_blank" rel="noopener" href="https://deepseek.csdn.net/67e383ff45a25f3de59f7bb0.html#devmenu4">MCP 实战：调用DeepSeek实现MCP客户端和服务端快速搭建_人工智能_Maslow503-DeepSeek技术社区</a></p>
+<p>MCP是Anthropic公司发布的，该公司发布了claude。所以官方给的例子基本都是基于claude Desktop为例的，或者基于Anthropic库，需要claude的KEY。虽然MCP支持几乎所有的大模型，但是claude的API和openai的API格式不一样！response的字段存在一些细微差别，github上有一些库在做兼容性的适配。所以直接拿官方的例子去兼容openai，需要改动！参考了上面一些文章，这里直接给出改动以后的代码。</p>
+<h2 id="server-py"><a target="_blank" rel="noopener" href="http://server.py">server.py</a></h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># server.py</span></span><br><span class="line"><span class="keyword">from</span> mcp.server.fastmcp <span class="keyword">import</span> FastMCP</span><br><span class="line"></span><br><span class="line"><span class="comment"># Create an MCP server</span></span><br><span class="line">mcp = FastMCP(<span class="string">&quot;Demo&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># Add an addition tool</span></span><br><span class="line"><span class="meta">@mcp.tool()</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">add</span>(<span class="params">a: <span class="built_in">int</span>, b: <span class="built_in">int</span></span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Add two numbers&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> a + b</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># Add a dynamic greeting resource</span></span><br><span class="line"><span class="meta">@mcp.resource(<span class="params"><span class="string">&quot;greeting://&#123;name&#125;&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_greeting</span>(<span class="params">name: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Get a personalized greeting&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">f&quot;Hello, <span class="subst">&#123;name&#125;</span>!&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="comment"># 初始化并运行 server</span></span><br><span class="line">    mcp.run(transport=<span class="string">&#x27;stdio&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="client-py"><a target="_blank" rel="noopener" href="http://client.py">client.py</a></h2>
+<ul>
+<li>注意需要要使用await self.client.chat.completions.create，一定得搭配AsyncOpenAI</li>
+<li>openai格式的response里面，Message里面的content和tool_calls一般只会有一个，choices一般也只有一个，所以一般都是response.choices[0].message，除非你调用的时候指定了参数n</li>
+</ul>
+<h3 id="下面给出两个响应的格式">下面给出两个响应的格式</h3>
+<ol>
+<li>询问你是谁</li>
+</ol>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">response = ChatCompletion(</span><br><span class="line">    id=<span class="string">&quot;chatcmpl-45b85001-e64c-98bb-830c-5d6267e83889&quot;</span><span class="punctuation">,</span></span><br><span class="line">    choices=<span class="punctuation">[</span></span><br><span class="line">        Choice(</span><br><span class="line">            finish_reason=<span class="string">&quot;stop&quot;</span><span class="punctuation">,</span></span><br><span class="line">            index=<span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">            logprobs=None<span class="punctuation">,</span></span><br><span class="line">            message=ChatCompletionMessage(</span><br><span class="line">                content=<span class="string">&quot;我是阿里云开发的超大规模语言模型，我的中文名字叫通义千问，英文名字叫Qwen。我可以回答问题、创作文字，比如写故事、写公文、写邮件、写剧本、逻辑推理、编程等等，还能表达观点，玩游戏等。如果你有任何问题或需要帮助，请随时告诉我！&quot;</span><span class="punctuation">,</span></span><br><span class="line">                refusal=None<span class="punctuation">,</span></span><br><span class="line">                role=<span class="string">&quot;assistant&quot;</span><span class="punctuation">,</span></span><br><span class="line">                annotations=None<span class="punctuation">,</span></span><br><span class="line">                audio=None<span class="punctuation">,</span></span><br><span class="line">                function_call=None<span class="punctuation">,</span></span><br><span class="line">                tool_calls=None<span class="punctuation">,</span></span><br><span class="line">            )<span class="punctuation">,</span></span><br><span class="line">        )</span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    created=<span class="number">1744787090</span><span class="punctuation">,</span></span><br><span class="line">    model=<span class="string">&quot;qwen-plus&quot;</span><span class="punctuation">,</span></span><br><span class="line">    object=<span class="string">&quot;chat.completion&quot;</span><span class="punctuation">,</span></span><br><span class="line">    service_tier=None<span class="punctuation">,</span></span><br><span class="line">    system_fingerprint=None<span class="punctuation">,</span></span><br><span class="line">    usage=CompletionUsage(</span><br><span class="line">        completion_tokens=<span class="number">69</span><span class="punctuation">,</span></span><br><span class="line">        prompt_tokens=<span class="number">187</span><span class="punctuation">,</span></span><br><span class="line">        total_tokens=<span class="number">256</span><span class="punctuation">,</span></span><br><span class="line">        completion_tokens_details=None<span class="punctuation">,</span></span><br><span class="line">        prompt_tokens_details=PromptTokensDetails(audio_tokens=None<span class="punctuation">,</span> cached_tokens=<span class="number">0</span>)<span class="punctuation">,</span></span><br><span class="line">    )<span class="punctuation">,</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>询问两个数相加</li>
+</ol>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">response = ChatCompletion(</span><br><span class="line">    id=<span class="string">&quot;chatcmpl-8ab31b9c-99ad-97e8-805f-e77bdd535436&quot;</span><span class="punctuation">,</span></span><br><span class="line">    choices=<span class="punctuation">[</span></span><br><span class="line">        Choice(</span><br><span class="line">            finish_reason=<span class="string">&quot;tool_calls&quot;</span><span class="punctuation">,</span></span><br><span class="line">            index=<span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">            logprobs=None<span class="punctuation">,</span></span><br><span class="line">            message=ChatCompletionMessage(</span><br><span class="line">                content=<span class="string">&quot;&quot;</span><span class="punctuation">,</span></span><br><span class="line">                refusal=None<span class="punctuation">,</span></span><br><span class="line">                role=<span class="string">&quot;assistant&quot;</span><span class="punctuation">,</span></span><br><span class="line">                annotations=None<span class="punctuation">,</span></span><br><span class="line">                audio=None<span class="punctuation">,</span></span><br><span class="line">                function_call=None<span class="punctuation">,</span></span><br><span class="line">                tool_calls=<span class="punctuation">[</span></span><br><span class="line">                    ChatCompletionMessageToolCall(</span><br><span class="line">                        id=<span class="string">&quot;call_dee4a8444cab44beacee2b&quot;</span><span class="punctuation">,</span></span><br><span class="line">                        function=Function(</span><br><span class="line">                            arguments=&#x27;<span class="punctuation">&#123;</span><span class="attr">&quot;a&quot;</span><span class="punctuation">:</span> <span class="number">100</span><span class="punctuation">,</span> <span class="attr">&quot;b&quot;</span><span class="punctuation">:</span> <span class="number">3300</span><span class="punctuation">&#125;</span>&#x27;<span class="punctuation">,</span> name=<span class="string">&quot;add&quot;</span></span><br><span class="line">                        )<span class="punctuation">,</span></span><br><span class="line">                        type=<span class="string">&quot;function&quot;</span><span class="punctuation">,</span></span><br><span class="line">                        index=<span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">                    )</span><br><span class="line">                <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">            )<span class="punctuation">,</span></span><br><span class="line">        )</span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    created=<span class="number">1744774816</span><span class="punctuation">,</span></span><br><span class="line">    model=<span class="string">&quot;qwen-plus&quot;</span><span class="punctuation">,</span></span><br><span class="line">    object=<span class="string">&quot;chat.completion&quot;</span><span class="punctuation">,</span></span><br><span class="line">    service_tier=None<span class="punctuation">,</span></span><br><span class="line">    system_fingerprint=None<span class="punctuation">,</span></span><br><span class="line">    usage=CompletionUsage(</span><br><span class="line">        completion_tokens=<span class="number">27</span><span class="punctuation">,</span></span><br><span class="line">        prompt_tokens=<span class="number">192</span><span class="punctuation">,</span></span><br><span class="line">        total_tokens=<span class="number">219</span><span class="punctuation">,</span></span><br><span class="line">        completion_tokens_details=None<span class="punctuation">,</span></span><br><span class="line">        prompt_tokens_details=PromptTokensDetails(audio_tokens=None<span class="punctuation">,</span> cached_tokens=<span class="number">0</span>)<span class="punctuation">,</span></span><br><span class="line">    )<span class="punctuation">,</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">Optional</span></span><br><span class="line"><span class="keyword">from</span> contextlib <span class="keyword">import</span> AsyncExitStack</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> httpx</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> mcp <span class="keyword">import</span> ClientSession, StdioServerParameters</span><br><span class="line"><span class="keyword">from</span> mcp.client.stdio <span class="keyword">import</span> stdio_client</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> openai <span class="keyword">import</span> AsyncOpenAI</span><br><span class="line"><span class="keyword">from</span> dotenv <span class="keyword">import</span> load_dotenv</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line">load_dotenv()  <span class="comment"># load environment variables from .env</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MCPClient</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="comment"># Initialize session and client objects</span></span><br><span class="line">        self.session: <span class="type">Optional</span>[ClientSession] = <span class="literal">None</span></span><br><span class="line">        self.exit_stack = AsyncExitStack()</span><br><span class="line">        self.client = AsyncOpenAI(</span><br><span class="line">            base_url=<span class="string">&quot;https://dashscope.aliyuncs.com/compatible-mode/v1&quot;</span>,</span><br><span class="line">            api_key=<span class="string">&quot;sk-xxxxx&quot;</span>,</span><br><span class="line">            http_client=httpx.AsyncClient(verify=<span class="literal">False</span>)</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">connect_to_server</span>(<span class="params">self, server_script_path: <span class="built_in">str</span></span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Connect to an MCP server</span></span><br><span class="line"><span class="string">        </span></span><br><span class="line"><span class="string">        Args:</span></span><br><span class="line"><span class="string">            server_script_path: Path to the server script (.py or .js)</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        is_python = server_script_path.endswith(<span class="string">&#x27;.py&#x27;</span>)</span><br><span class="line">        is_js = server_script_path.endswith(<span class="string">&#x27;.js&#x27;</span>)</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> (is_python <span class="keyword">or</span> is_js):</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">&quot;Server script must be a .py or .js file&quot;</span>)</span><br><span class="line">            </span><br><span class="line">        command = <span class="string">&quot;python&quot;</span> <span class="keyword">if</span> is_python <span class="keyword">else</span> <span class="string">&quot;node&quot;</span></span><br><span class="line">        server_params = StdioServerParameters(</span><br><span class="line">            command=command,</span><br><span class="line">            args=[server_script_path],</span><br><span class="line">            env=<span class="literal">None</span></span><br><span class="line">        )</span><br><span class="line">        </span><br><span class="line">        stdio_transport = <span class="keyword">await</span> self.exit_stack.enter_async_context(stdio_client(server_params))</span><br><span class="line">        self.stdio, self.write = stdio_transport</span><br><span class="line">        self.session = <span class="keyword">await</span> self.exit_stack.enter_async_context(ClientSession(self.stdio, self.write))</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">await</span> self.session.initialize()</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># List available tools</span></span><br><span class="line">        response = <span class="keyword">await</span> self.session.list_tools()</span><br><span class="line">        tools = response.tools</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;\nConnected to server with tools:&quot;</span>, [tool.name <span class="keyword">for</span> tool <span class="keyword">in</span> tools])</span><br><span class="line"></span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">process_query</span>(<span class="params">self, query: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;使用 LLM 和 MCP 服务器提供的工具处理查询&quot;&quot;&quot;</span></span><br><span class="line">        messages = [</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>,</span><br><span class="line">                <span class="string">&quot;content&quot;</span>: query</span><br><span class="line">            &#125;</span><br><span class="line">        ]</span><br><span class="line"></span><br><span class="line">        response = <span class="keyword">await</span> self.session.list_tools()</span><br><span class="line">        available_tools = [&#123;</span><br><span class="line">            <span class="string">&quot;type&quot;</span>: <span class="string">&quot;function&quot;</span>,</span><br><span class="line">            <span class="string">&quot;function&quot;</span>: &#123;</span><br><span class="line">                <span class="string">&quot;name&quot;</span>: tool.name,</span><br><span class="line">                <span class="string">&quot;description&quot;</span>: tool.description,</span><br><span class="line">                <span class="string">&quot;parameters&quot;</span>: tool.inputSchema</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">for</span> tool <span class="keyword">in</span> response.tools]</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 初始化 LLM API 调用</span></span><br><span class="line">        response = <span class="keyword">await</span> self.client.chat.completions.create(</span><br><span class="line">            model=<span class="string">&quot;qwen-plus&quot;</span>,</span><br><span class="line">            messages=messages,</span><br><span class="line">            tools=available_tools</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        final_text = []</span><br><span class="line">        message = response.choices[<span class="number">0</span>].message</span><br><span class="line">        final_text.append(message.content <span class="keyword">or</span> <span class="string">&quot;&quot;</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 处理响应并处理工具调用</span></span><br><span class="line">        <span class="keyword">while</span> message.tool_calls:</span><br><span class="line">            <span class="comment"># 处理每个工具调用</span></span><br><span class="line">            <span class="keyword">for</span> tool_call <span class="keyword">in</span> message.tool_calls:</span><br><span class="line">                tool_name = tool_call.function.name</span><br><span class="line">                tool_args = json.loads(tool_call.function.arguments)</span><br><span class="line"></span><br><span class="line">                <span class="comment"># 执行工具调用</span></span><br><span class="line">                result = <span class="keyword">await</span> self.session.call_tool(tool_name, tool_args)</span><br><span class="line">                final_text.append(<span class="string">f&quot;[Calling tool <span class="subst">&#123;tool_name&#125;</span> with args <span class="subst">&#123;tool_args&#125;</span>]&quot;</span>)</span><br><span class="line"></span><br><span class="line">                <span class="comment"># 将工具调用和结果添加到消息历史</span></span><br><span class="line">                messages.append(&#123;</span><br><span class="line">                    <span class="string">&quot;role&quot;</span>: <span class="string">&quot;assistant&quot;</span>,</span><br><span class="line">                    <span class="string">&quot;tool_calls&quot;</span>: [</span><br><span class="line">                        &#123;</span><br><span class="line">                            <span class="string">&quot;id&quot;</span>: tool_call.<span class="built_in">id</span>,</span><br><span class="line">                            <span class="string">&quot;type&quot;</span>: <span class="string">&quot;function&quot;</span>,</span><br><span class="line">                            <span class="string">&quot;function&quot;</span>: &#123;</span><br><span class="line">                                <span class="string">&quot;name&quot;</span>: tool_name,</span><br><span class="line">                                <span class="string">&quot;arguments&quot;</span>: json.dumps(tool_args)</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br><span class="line">                    ]</span><br><span class="line">                &#125;)</span><br><span class="line">                messages.append(&#123;</span><br><span class="line">                    <span class="string">&quot;role&quot;</span>: <span class="string">&quot;tool&quot;</span>,</span><br><span class="line">                    <span class="string">&quot;tool_call_id&quot;</span>: tool_call.<span class="built_in">id</span>,</span><br><span class="line">                    <span class="string">&quot;content&quot;</span>: <span class="built_in">str</span>(result.content)</span><br><span class="line">                &#125;)</span><br><span class="line"></span><br><span class="line">            <span class="comment"># 将工具调用的结果交给 LLM</span></span><br><span class="line">            response = <span class="keyword">await</span> self.client.chat.completions.create(</span><br><span class="line">                model=<span class="string">&quot;qwen-plus&quot;</span>,</span><br><span class="line">                messages=messages,</span><br><span class="line">                tools=available_tools</span><br><span class="line">            )</span><br><span class="line"></span><br><span class="line">            message = response.choices[<span class="number">0</span>].message</span><br><span class="line">            <span class="keyword">if</span> message.content:</span><br><span class="line">                final_text.append(message.content)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;\n&quot;</span>.join(final_text)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">chat_loop</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Run an interactive chat loop&quot;&quot;&quot;</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;\nMCP Client Started!&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Type your queries or &#x27;quit&#x27; to exit.&quot;</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                query = <span class="built_in">input</span>(<span class="string">&quot;\nQuery: &quot;</span>).strip()</span><br><span class="line">                </span><br><span class="line">                <span class="keyword">if</span> query.lower() == <span class="string">&#x27;quit&#x27;</span>:</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">                    </span><br><span class="line">                response = <span class="keyword">await</span> self.process_query(query)</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&quot;\n&quot;</span> + response)</span><br><span class="line">                    </span><br><span class="line">            <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">f&quot;\nError: <span class="subst">&#123;<span class="built_in">str</span>(e)&#125;</span>&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">cleanup</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Clean up resources&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">await</span> self.exit_stack.aclose()</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(sys.argv) &lt; <span class="number">2</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Usage: python client.py &lt;path_to_server_script&gt;&quot;</span>)</span><br><span class="line">        sys.exit(<span class="number">1</span>)</span><br><span class="line">        </span><br><span class="line">    client = MCPClient()</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">await</span> client.connect_to_server(sys.argv[<span class="number">1</span>])</span><br><span class="line">        <span class="keyword">await</span> client.chat_loop()</span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        <span class="keyword">await</span> client.cleanup()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="keyword">import</span> sys</span><br><span class="line">    asyncio.run(main())</span><br></pre></td></tr></table></figure>
+<p>实际使用中，server一般直接拿已有的，client可能需要我们自己去开发或者适配</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/LLM/" rel="tag"># LLM</a>
+              <a href="/tags/Agent/" rel="tag"># Agent</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/04/16/MetaGPT%E8%A7%A3%E8%AF%BB/" rel="prev" title="MetaGPT解读">
+      <i class="fa fa-chevron-left"></i> MetaGPT解读
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">关于MCP的一些坑</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#server-py"><span class="nav-text">server.py</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#client-py"><span class="nav-text">client.py</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E9%9D%A2%E7%BB%99%E5%87%BA%E4%B8%A4%E4%B8%AA%E5%93%8D%E5%BA%94%E7%9A%84%E6%A0%BC%E5%BC%8F"><span class="nav-text">下面给出两个响应的格式</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zhangyitao</p>
+  <div class="site-description" itemprop="description">一切过往，皆为序曲</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zhangyitao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

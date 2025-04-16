@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"wjdmyby98k.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="MetaGPT解读，与openManus同属团队">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MetaGPT解读">
+<meta property="og:url" content="https://wjdmyby98k.github.io/2025/04/16/MetaGPT%E8%A7%A3%E8%AF%BB/index.html">
+<meta property="og:site_name" content="就是要摸鱼">
+<meta property="og:description" content="MetaGPT解读，与openManus同属团队">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-04-16T11:55:18.000Z">
+<meta property="article:modified_time" content="2025-04-16T12:01:51.738Z">
+<meta property="article:author" content="zhangyitao">
+<meta property="article:tag" content="LLM">
+<meta property="article:tag" content="Agent">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://wjdmyby98k.github.io/2025/04/16/MetaGPT%E8%A7%A3%E8%AF%BB/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>MetaGPT解读 | 就是要摸鱼</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">就是要摸鱼</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wjdmyby98k.github.io/2025/04/16/MetaGPT%E8%A7%A3%E8%AF%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhangyitao">
+      <meta itemprop="description" content="一切过往，皆为序曲">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="就是要摸鱼">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          MetaGPT解读
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2025-04-16 19:55:18 / 修改时间：20:01:51" itemprop="dateCreated datePublished" datetime="2025-04-16T19:55:18+08:00">2025-04-16</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LLM/" itemprop="url" rel="index"><span itemprop="name">LLM</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Agent/" itemprop="url" rel="index"><span itemprop="name">Agent</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">MetaGPT解读，与openManus同属团队</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1>MetaGPT</h1>
+<h2 id="事前准备工作">事前准备工作</h2>
+<p>版本：v0.8.1</p>
+<p>按照官网配置好api和model  <a target="_blank" rel="noopener" href="https://docs.deepwisdom.ai/main/zh/guide/get_started/configuration/tools.html">https://docs.deepwisdom.ai/main/zh/guide/get_started/configuration/tools.html</a></p>
+<p>在公司运行需要改aiohttp源码，取消ssl校验</p>
+<p>在项目目录下pip install -e .   必须执行，否则会出现改动代码导致日志行号不对</p>
+<p>一些说明：</p>
+<ul>
+<li>SerializeAsAny的目的是为了保证序列化的时候，根据实际类别去序列化，如果是子类，不会丢失父类的属性</li>
+<li>在role.py的_react函数中，rsp = Message(content=“No actions taken yet”, cause_by=Action)  # will be overwritten after Role _act    cause_by是一个str类型，为什么可以用Action这个类去传参？因为Message做了field_validator，会自动将cause_by转换为str，在项目中大量使用了Pydantic的validator功能以及一些装饰器，可以提前了解一下装饰器</li>
+<li>react过程都比较统一规范，参考之前的openManus</li>
+</ul>
+<h2 id="官方的简单例子，调用链路">官方的简单例子，调用链路</h2>
+<h3 id="已有的agent">已有的agent</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 可导入任何角色，初始化它，用一个开始的消息运行它，完成！</span></span><br><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> metagpt.roles.product_manager <span class="keyword">import</span> ProductManager</span><br><span class="line"><span class="keyword">from</span> metagpt.logs <span class="keyword">import</span> logger</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    msg = <span class="string">&quot;Write a PRD for a snake game&quot;</span></span><br><span class="line">    role = ProductManager()</span><br><span class="line">    result = <span class="keyword">await</span> role.run(msg)</span><br><span class="line">    logger.info(result.content[:<span class="number">100</span>])</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    asyncio.run(main())</span><br><span class="line">role = ProductManager()</span><br><span class="line">    --&gt;role.run(msg)</span><br><span class="line">        --&gt;self.put_message(msg)</span><br><span class="line">        --&gt;self._observe()   注意这里是子类再调父类</span><br><span class="line">            --&gt;self.rc.msg_buffer.pop_all()  news</span><br><span class="line">        --&gt;self.react()   根据不同的mode去执行不同的act</span><br><span class="line">            --&gt;self._react()  rsp</span><br><span class="line">                --&gt;<span class="keyword">while</span> actions_taken &lt; self.rc.max_react_loop:</span><br><span class="line">                    --&gt; self._think()   </span><br><span class="line">                        --&gt;self._set_state   设置接下来调用哪个Action</span><br><span class="line">                    --&gt; self._act()          调用Action的run函数，直白点就是工具调用</span><br><span class="line">                        --&gt;self.rc.todo.run</span><br><span class="line">                        --&gt;self.rc.memory.add(msg)</span><br><span class="line">        --&gt;<span class="keyword">return</span> rsp</span><br></pre></td></tr></table></figure>
+<p><strong>ProductManager类的构造和_think</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, **kwargs</span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">    <span class="built_in">super</span>().__init__(**kwargs)</span><br><span class="line"></span><br><span class="line">    self.set_actions([PrepareDocuments, WritePRD])</span><br><span class="line">    self._watch([UserRequirement, PrepareDocuments])</span><br><span class="line">    self.todo_action = any_to_name(PrepareDocuments)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">_think</span>(<span class="params">self</span>) -&gt; <span class="built_in">bool</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Decide what to do&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">if</span> self.git_repo <span class="keyword">and</span> <span class="keyword">not</span> self.config.git_reinit:</span><br><span class="line">        self._set_state(<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        self._set_state(<span class="number">0</span>)</span><br><span class="line">        self.config.git_reinit = <span class="literal">False</span></span><br><span class="line">        self.todo_action = any_to_name(WritePRD)</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">bool</span>(self.rc.todo)</span><br></pre></td></tr></table></figure>
+<p>_think的逻辑其实和构造函数是相关的，PrepareDocuments是去初始化一个目录，在workspace目录下，同时在logs下会记录日志。如果是已经创建了目录，那就把接下来的的Action设置为WritePRD，默认是PrepareDocuments。后面我们会看到，我们创建自定义Agent，其实就是需要我们①去继承Action写&quot;工具&quot;，提供run函数，②继承Role，去重写_act。（可以把Action理解为工具提供方，act理解为工具执行者？）</p>
+<h3 id="单Action">单Action</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">from</span> metagpt.actions <span class="keyword">import</span> Action</span><br><span class="line"><span class="keyword">from</span> metagpt.schema <span class="keyword">import</span> Message</span><br><span class="line"><span class="keyword">from</span> metagpt.logs <span class="keyword">import</span> logger</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SimpleWriteCode</span>(<span class="title class_ inherited__">Action</span>):</span><br><span class="line">    PROMPT_TEMPLATE: <span class="built_in">str</span> = <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    Write a python function that can &#123;instruction&#125; and provide two runnnable test cases.</span></span><br><span class="line"><span class="string">    Return ```python your_code_here ```with NO other texts,</span></span><br><span class="line"><span class="string">    your code:</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    name: <span class="built_in">str</span> = <span class="string">&quot;SimpleWriteCode&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">run</span>(<span class="params">self, instruction: <span class="built_in">str</span></span>):</span><br><span class="line">        prompt = self.PROMPT_TEMPLATE.<span class="built_in">format</span>(instruction=instruction)</span><br><span class="line"></span><br><span class="line">        rsp = <span class="keyword">await</span> self._aask(prompt)</span><br><span class="line"></span><br><span class="line">        code_text = SimpleWriteCode.parse_code(rsp)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> code_text</span><br><span class="line"></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">parse_code</span>(<span class="params">rsp</span>):</span><br><span class="line">        pattern = <span class="string">r&quot;```python(.*)```&quot;</span></span><br><span class="line">        <span class="keyword">match</span> = re.search(pattern, rsp, re.DOTALL)</span><br><span class="line">        code_text = <span class="keyword">match</span>.group(<span class="number">1</span>) <span class="keyword">if</span> <span class="keyword">match</span> <span class="keyword">else</span> rsp</span><br><span class="line">        <span class="keyword">return</span> code_text</span><br><span class="line">    </span><br><span class="line"><span class="keyword">from</span> metagpt.roles <span class="keyword">import</span> Role</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SimpleCoder</span>(<span class="title class_ inherited__">Role</span>):</span><br><span class="line">    name: <span class="built_in">str</span> = <span class="string">&quot;Alice&quot;</span></span><br><span class="line">    profile: <span class="built_in">str</span> = <span class="string">&quot;SimpleCoder&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, **kwargs</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__(**kwargs)</span><br><span class="line">        self.set_actions([SimpleWriteCode])</span><br><span class="line"></span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">_act</span>(<span class="params">self</span>) -&gt; Message:</span><br><span class="line">        logger.info(<span class="string">f&quot;<span class="subst">&#123;self._setting&#125;</span>: to do <span class="subst">&#123;self.rc.todo&#125;</span>(<span class="subst">&#123;self.rc.todo.name&#125;</span>)&quot;</span>)</span><br><span class="line">        todo = self.rc.todo  <span class="comment"># todo will be SimpleWriteCode()</span></span><br><span class="line"></span><br><span class="line">        msg = self.get_memories(k=<span class="number">1</span>)[<span class="number">0</span>]  <span class="comment"># find the most recent messages</span></span><br><span class="line">        code_text = <span class="keyword">await</span> todo.run(msg.content)</span><br><span class="line">        msg = Message(content=code_text, role=self.profile, cause_by=<span class="built_in">type</span>(todo))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> msg</span><br><span class="line">    </span><br><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    msg = <span class="string">&quot;write a function that calculates the sum of a list&quot;</span></span><br><span class="line">    role = SimpleCoder()</span><br><span class="line">    logger.info(msg)</span><br><span class="line">    result = <span class="keyword">await</span> role.run(msg)</span><br><span class="line">    logger.info(result)</span><br><span class="line"></span><br><span class="line">asyncio.run(main())</span><br></pre></td></tr></table></figure>
+<h3 id="多Action">多Action</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Filename: MetaGPT/examples/build_customized_agent.py</span></span><br><span class="line"><span class="string">Created Date: Tuesday, September 19th 2023, 6:52:25 pm</span></span><br><span class="line"><span class="string">Author: garylin2099</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> fire</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> metagpt.actions <span class="keyword">import</span> Action</span><br><span class="line"><span class="keyword">from</span> metagpt.logs <span class="keyword">import</span> logger</span><br><span class="line"><span class="keyword">from</span> metagpt.roles.role <span class="keyword">import</span> Role, RoleReactMode</span><br><span class="line"><span class="keyword">from</span> metagpt.schema <span class="keyword">import</span> Message</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SimpleWriteCode</span>(<span class="title class_ inherited__">Action</span>):</span><br><span class="line">    PROMPT_TEMPLATE: <span class="built_in">str</span> = <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    Write a python function that can &#123;instruction&#125; and provide two runnable test cases.</span></span><br><span class="line"><span class="string">    Return ```python your_code_here ```with NO other texts,</span></span><br><span class="line"><span class="string">    your code:</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    name: <span class="built_in">str</span> = <span class="string">&quot;SimpleWriteCode&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">run</span>(<span class="params">self, instruction: <span class="built_in">str</span></span>):</span><br><span class="line">        prompt = self.PROMPT_TEMPLATE.<span class="built_in">format</span>(instruction=instruction)</span><br><span class="line"></span><br><span class="line">        rsp = <span class="keyword">await</span> self._aask(prompt)</span><br><span class="line"></span><br><span class="line">        code_text = SimpleWriteCode.parse_code(rsp)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> code_text</span><br><span class="line"></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">parse_code</span>(<span class="params">rsp</span>):</span><br><span class="line">        pattern = <span class="string">r&quot;```python(.*)```&quot;</span></span><br><span class="line">        <span class="keyword">match</span> = re.search(pattern, rsp, re.DOTALL)</span><br><span class="line">        code_text = <span class="keyword">match</span>.group(<span class="number">1</span>) <span class="keyword">if</span> <span class="keyword">match</span> <span class="keyword">else</span> rsp</span><br><span class="line">        <span class="keyword">return</span> code_text</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SimpleRunCode</span>(<span class="title class_ inherited__">Action</span>):</span><br><span class="line">    name: <span class="built_in">str</span> = <span class="string">&quot;SimpleRunCode&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">run</span>(<span class="params">self, code_text: <span class="built_in">str</span></span>):</span><br><span class="line">        result = subprocess.run([<span class="string">&quot;python3&quot;</span>, <span class="string">&quot;-c&quot;</span>, code_text], capture_output=<span class="literal">True</span>, text=<span class="literal">True</span>)</span><br><span class="line">        code_result = result.stdout</span><br><span class="line">        logger.info(<span class="string">f&quot;<span class="subst">&#123;code_result=&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> code_result</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SimpleCoder</span>(<span class="title class_ inherited__">Role</span>):</span><br><span class="line">    name: <span class="built_in">str</span> = <span class="string">&quot;Alice&quot;</span></span><br><span class="line">    profile: <span class="built_in">str</span> = <span class="string">&quot;SimpleCoder&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, **kwargs</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__(**kwargs)</span><br><span class="line">        self.set_actions([SimpleWriteCode])</span><br><span class="line"></span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">_act</span>(<span class="params">self</span>) -&gt; Message:</span><br><span class="line">        logger.info(<span class="string">f&quot;<span class="subst">&#123;self._setting&#125;</span>: to do <span class="subst">&#123;self.rc.todo&#125;</span>(<span class="subst">&#123;self.rc.todo.name&#125;</span>)&quot;</span>)</span><br><span class="line">        todo = self.rc.todo  <span class="comment"># todo will be SimpleWriteCode()</span></span><br><span class="line"></span><br><span class="line">        msg = self.get_memories(k=<span class="number">1</span>)[<span class="number">0</span>]  <span class="comment"># find the most recent messages</span></span><br><span class="line">        code_text = <span class="keyword">await</span> todo.run(msg.content)</span><br><span class="line">        msg = Message(content=code_text, role=self.profile, cause_by=<span class="built_in">type</span>(todo))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> msg</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">RunnableCoder</span>(<span class="title class_ inherited__">Role</span>):</span><br><span class="line">    name: <span class="built_in">str</span> = <span class="string">&quot;Alice&quot;</span></span><br><span class="line">    profile: <span class="built_in">str</span> = <span class="string">&quot;RunnableCoder&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, **kwargs</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__(**kwargs)</span><br><span class="line">        self.set_actions([SimpleWriteCode, SimpleRunCode])</span><br><span class="line">        self._set_react_mode(react_mode=RoleReactMode.BY_ORDER.value)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">_act</span>(<span class="params">self</span>) -&gt; Message:</span><br><span class="line">        logger.info(<span class="string">f&quot;<span class="subst">&#123;self._setting&#125;</span>: to do <span class="subst">&#123;self.rc.todo&#125;</span>(<span class="subst">&#123;self.rc.todo.name&#125;</span>)&quot;</span>)</span><br><span class="line">        <span class="comment"># By choosing the Action by order under the hood</span></span><br><span class="line">        <span class="comment"># todo will be first SimpleWriteCode() then SimpleRunCode()</span></span><br><span class="line">        todo = self.rc.todo</span><br><span class="line"></span><br><span class="line">        msg = self.get_memories(k=<span class="number">1</span>)[<span class="number">0</span>]  <span class="comment"># find the most k recent messages</span></span><br><span class="line">        result = <span class="keyword">await</span> todo.run(msg.content)</span><br><span class="line"></span><br><span class="line">        msg = Message(content=result, role=self.profile, cause_by=<span class="built_in">type</span>(todo))</span><br><span class="line">        self.rc.memory.add(msg)</span><br><span class="line">        <span class="keyword">return</span> msg</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>(<span class="params">msg=<span class="string">&quot;write a function that calculates the product of a list and run it&quot;</span></span>):</span><br><span class="line">    <span class="comment"># role = SimpleCoder()</span></span><br><span class="line">    role = RunnableCoder()</span><br><span class="line">    logger.info(msg)</span><br><span class="line">    result = asyncio.run(role.run(msg))</span><br><span class="line">    logger.info(result)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    fire.Fire(main)</span><br></pre></td></tr></table></figure>
+<p>多Action相比单Action除了数量的区别，Role实例化的时候会设置self._set_react_mode(react_mode=RoleReactMode.BY_ORDER.value)，这样会自动依次执行事先排列好的Action</p>
+<h3 id="多Agent">多Agent</h3>
+<p><a target="_blank" rel="noopener" href="https://docs.deepwisdom.ai/v0.8/zh/guide/tutorials/multi_agent_101.html">https://docs.deepwisdom.ai/v0.8/zh/guide/tutorials/multi_agent_101.html</a></p>
+<p>原理与上面差不多，但是metaGPT不适配MCP，后面重点关注openmanus和openai-agent类似的支持MCP协议的框架</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/LLM/" rel="tag"># LLM</a>
+              <a href="/tags/Agent/" rel="tag"># Agent</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/03/31/asyncio%E6%80%BB%E7%BB%93/" rel="prev" title="asyncio总结">
+      <i class="fa fa-chevron-left"></i> asyncio总结
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/04/16/MCP%E8%B8%A9%E5%9D%91%E6%97%A5%E8%AE%B0/" rel="next" title="MCP踩坑日记">
+      MCP踩坑日记 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">MetaGPT</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8B%E5%89%8D%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="nav-text">事前准备工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%98%E6%96%B9%E7%9A%84%E7%AE%80%E5%8D%95%E4%BE%8B%E5%AD%90%EF%BC%8C%E8%B0%83%E7%94%A8%E9%93%BE%E8%B7%AF"><span class="nav-text">官方的简单例子，调用链路</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B7%B2%E6%9C%89%E7%9A%84agent"><span class="nav-text">已有的agent</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%95Action"><span class="nav-text">单Action</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9AAction"><span class="nav-text">多Action</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9AAgent"><span class="nav-text">多Agent</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zhangyitao</p>
+  <div class="site-description" itemprop="description">一切过往，皆为序曲</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zhangyitao</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
