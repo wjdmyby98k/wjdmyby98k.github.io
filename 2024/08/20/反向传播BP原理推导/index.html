@@ -357,44 +357,33 @@ mjx-container[display="true"] + br {
     <div class="post-body" itemprop="articleBody">
 
       
-        <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_32865355/article/details/80260212?ops_request_misc=%7B%22request%5Fid%22%3A%22172408180116800188536422%22%2C%22scm%22%3A%2220140713.130102334.pc%5Fall.%22%7D&amp;request_id=172408180116800188536422&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~first_rank_ecpm_v1~hot_rank-1-80260212-null-null.142%5Ev100%5Epc_search_result_base7&amp;utm_term=bp%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD&amp;spm=1018.2226.3001.4187">神经网络BP反向传播算法原理和详细推导流程_神经网络反向传播算法-CSDN博客</a></p>
+        <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_32865355/article/details/80260212?ops_request_misc=%7B%22request%5Fid%22%3A%22172408180116800188536422%22%2C%22scm%22%3A%2220140713.130102334.pc%5Fall.%22%7D&amp;request_id=172408180116800188536422&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~first_rank_ecpm_v1~hot_rank-1-80260212-null-null.142^v100^pc_search_result_base7&amp;utm_term=bp反向传播&amp;spm=1018.2226.3001.4187">神经网络BP反向传播算法原理和详细推导流程_神经网络反向传播算法-CSDN博客</a></p>
 <p>原称之为全网最强讲解，搬运过来留个备份。后面有空搞一个手打版，这里还是用的图。。。</p>
-<h3 id="1-反向传播算法和BP网络简介">1. 反向传播算法和BP网络简介</h3>
-<p>误差反向传播算法简称反向传播算法（即BP算法）。使用反向传播算法的多层感知器又称为BP神经网络。BP算法是一个迭代算法，它的基本思想为：（1）先计算每一层的状态和激活值，直到最后一层（即信号是前向传播的）；（2）计算每一层的误差，误差的计算过程是从最后一层向前推进的（这就是反向传播算法名字的由来）；（3）更新参数（目标是误差变小）。迭代前面两个步骤，直到满足停止准则（比如相邻两次迭代的误差的差别很小）。</p>
+<h3 id="1-反向传播算法和BP网络简介"><a href="#1-反向传播算法和BP网络简介" class="headerlink" title="1. 反向传播算法和BP网络简介"></a>1. 反向传播算法和BP网络简介</h3><p>误差反向传播算法简称反向传播算法（即BP算法）。使用反向传播算法的多层感知器又称为BP神经网络。BP算法是一个迭代算法，它的基本思想为：（1）先计算每一层的状态和激活值，直到最后一层（即信号是前向传播的）；（2）计算每一层的误差，误差的计算过程是从最后一层向前推进的（这就是反向传播算法名字的由来）；（3）更新参数（目标是误差变小）。迭代前面两个步骤，直到满足停止准则（比如相邻两次迭代的误差的差别很小）。</p>
 <p>本文的记号说明：</p>
 <img src="/2024/08/20/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%ADBP%E5%8E%9F%E7%90%86%E6%8E%A8%E5%AF%BC/1.png" class="" title="图1">
 <p>下面以三层感知器(即只含有一个隐藏层的多层感知器)为例介绍“反向传播算法(BP 算法)”。</p>
 <img src="/2024/08/20/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%ADBP%E5%8E%9F%E7%90%86%E6%8E%A8%E5%AF%BC/2.png" class="" title="图2">
-<h3 id="2-信息前向传播">2. 信息前向传播</h3>
-<img src="/2024/08/20/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%ADBP%E5%8E%9F%E7%90%86%E6%8E%A8%E5%AF%BC/3.png" class="" title="图3">
-<h3 id="3-误差反向传播">3. 误差反向传播</h3>
-<img src="/2024/08/20/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%ADBP%E5%8E%9F%E7%90%86%E6%8E%A8%E5%AF%BC/4.png" class="" title="图4">
+<h3 id="2-信息前向传播"><a href="#2-信息前向传播" class="headerlink" title="2. 信息前向传播"></a>2. 信息前向传播</h3><img src="/2024/08/20/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%ADBP%E5%8E%9F%E7%90%86%E6%8E%A8%E5%AF%BC/3.png" class="" title="图3">
+<h3 id="3-误差反向传播"><a href="#3-误差反向传播" class="headerlink" title="3. 误差反向传播"></a>3. 误差反向传播</h3><img src="/2024/08/20/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%ADBP%E5%8E%9F%E7%90%86%E6%8E%A8%E5%AF%BC/4.png" class="" title="图4">
 <img src="/2024/08/20/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%ADBP%E5%8E%9F%E7%90%86%E6%8E%A8%E5%AF%BC/5.png" class="" title="图5">
 <img src="/2024/08/20/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%ADBP%E5%8E%9F%E7%90%86%E6%8E%A8%E5%AF%BC/6.png" class="" title="图6">
-<h4 id="3-1-输出层的权重参数更新">3.1 输出层的权重参数更新</h4>
-<img src="/2024/08/20/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%ADBP%E5%8E%9F%E7%90%86%E6%8E%A8%E5%AF%BC/7.png" class="" title="图7">
+<h4 id="3-1-输出层的权重参数更新"><a href="#3-1-输出层的权重参数更新" class="headerlink" title="3.1 输出层的权重参数更新"></a>3.1 输出层的权重参数更新</h4><img src="/2024/08/20/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%ADBP%E5%8E%9F%E7%90%86%E6%8E%A8%E5%AF%BC/7.png" class="" title="图7">
 <img src="/2024/08/20/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%ADBP%E5%8E%9F%E7%90%86%E6%8E%A8%E5%AF%BC/8.png" class="" title="图8">
 <img src="/2024/08/20/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%ADBP%E5%8E%9F%E7%90%86%E6%8E%A8%E5%AF%BC/9.png" class="" title="图9">
-<h4 id="3-2-隐藏层的权重参数更新">3.2 隐藏层的权重参数更新</h4>
-<img src="/2024/08/20/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%ADBP%E5%8E%9F%E7%90%86%E6%8E%A8%E5%AF%BC/10.png" class="" title="图10">
+<h4 id="3-2-隐藏层的权重参数更新"><a href="#3-2-隐藏层的权重参数更新" class="headerlink" title="3.2 隐藏层的权重参数更新"></a>3.2 隐藏层的权重参数更新</h4><img src="/2024/08/20/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%ADBP%E5%8E%9F%E7%90%86%E6%8E%A8%E5%AF%BC/10.png" class="" title="图10">
 <img src="/2024/08/20/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%ADBP%E5%8E%9F%E7%90%86%E6%8E%A8%E5%AF%BC/11.png" class="" title="图11">
 <img src="/2024/08/20/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%ADBP%E5%8E%9F%E7%90%86%E6%8E%A8%E5%AF%BC/12.png" class="" title="图12">
-<h4 id="3-3-输出层和隐藏层的偏置参数更新">3.3 输出层和隐藏层的偏置参数更新</h4>
-<img src="/2024/08/20/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%ADBP%E5%8E%9F%E7%90%86%E6%8E%A8%E5%AF%BC/13.png" class="" title="图13">
+<h4 id="3-3-输出层和隐藏层的偏置参数更新"><a href="#3-3-输出层和隐藏层的偏置参数更新" class="headerlink" title="3.3 输出层和隐藏层的偏置参数更新"></a>3.3 输出层和隐藏层的偏置参数更新</h4><img src="/2024/08/20/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%ADBP%E5%8E%9F%E7%90%86%E6%8E%A8%E5%AF%BC/13.png" class="" title="图13">
 <img src="/2024/08/20/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%ADBP%E5%8E%9F%E7%90%86%E6%8E%A8%E5%AF%BC/14.png" class="" title="图14">
-<h4 id="3-4-BP算法四个核心公式">3.4 BP算法四个核心公式</h4>
-<img src="/2024/08/20/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%ADBP%E5%8E%9F%E7%90%86%E6%8E%A8%E5%AF%BC/15.png" class="" title="图15">
-<h4 id="3-5-BP算法计算某个训练数据的代价函数对参数的偏导数">3.5 BP算法计算某个训练数据的代价函数对参数的偏导数</h4>
-<img src="/2024/08/20/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%ADBP%E5%8E%9F%E7%90%86%E6%8E%A8%E5%AF%BC/16.png" class="" title="图16">
+<h4 id="3-4-BP算法四个核心公式"><a href="#3-4-BP算法四个核心公式" class="headerlink" title="3.4 BP算法四个核心公式"></a>3.4 BP算法四个核心公式</h4><img src="/2024/08/20/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%ADBP%E5%8E%9F%E7%90%86%E6%8E%A8%E5%AF%BC/15.png" class="" title="图15">
+<h4 id="3-5-BP算法计算某个训练数据的代价函数对参数的偏导数"><a href="#3-5-BP算法计算某个训练数据的代价函数对参数的偏导数" class="headerlink" title="3.5 BP算法计算某个训练数据的代价函数对参数的偏导数"></a>3.5 BP算法计算某个训练数据的代价函数对参数的偏导数</h4><img src="/2024/08/20/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%ADBP%E5%8E%9F%E7%90%86%E6%8E%A8%E5%AF%BC/16.png" class="" title="图16">
 <img src="/2024/08/20/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%ADBP%E5%8E%9F%E7%90%86%E6%8E%A8%E5%AF%BC/17.png" class="" title="图17">
 <img src="/2024/08/20/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%ADBP%E5%8E%9F%E7%90%86%E6%8E%A8%E5%AF%BC/18.png" class="" title="图18">
-<h4 id="3-6-BP算法总结-用“批量梯度下降”算法更新参数">3.6 BP算法总结:用“批量梯度下降”算法更新参数</h4>
-<img src="/2024/08/20/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%ADBP%E5%8E%9F%E7%90%86%E6%8E%A8%E5%AF%BC/19.png" class="" title="图19">
+<h4 id="3-6-BP算法总结-用“批量梯度下降”算法更新参数"><a href="#3-6-BP算法总结-用“批量梯度下降”算法更新参数" class="headerlink" title="3.6 BP算法总结:用“批量梯度下降”算法更新参数"></a>3.6 BP算法总结:用“批量梯度下降”算法更新参数</h4><img src="/2024/08/20/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%ADBP%E5%8E%9F%E7%90%86%E6%8E%A8%E5%AF%BC/19.png" class="" title="图19">
 <img src="/2024/08/20/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%ADBP%E5%8E%9F%E7%90%86%E6%8E%A8%E5%AF%BC/20.png" class="" title="图20">
-<h3 id="4-梯度消失问题及其解决办法">4. 梯度消失问题及其解决办法</h3>
-<img src="/2024/08/20/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%ADBP%E5%8E%9F%E7%90%86%E6%8E%A8%E5%AF%BC/21.png" class="" title="图21">
-<h3 id="5-加快BP网络训练速度-Rprop-算法">5. 加快BP网络训练速度:Rprop 算法</h3>
-<img src="/2024/08/20/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%ADBP%E5%8E%9F%E7%90%86%E6%8E%A8%E5%AF%BC/22.png" class="" title="图22">
+<h3 id="4-梯度消失问题及其解决办法"><a href="#4-梯度消失问题及其解决办法" class="headerlink" title="4. 梯度消失问题及其解决办法"></a>4. 梯度消失问题及其解决办法</h3><img src="/2024/08/20/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%ADBP%E5%8E%9F%E7%90%86%E6%8E%A8%E5%AF%BC/21.png" class="" title="图21">
+<h3 id="5-加快BP网络训练速度-Rprop-算法"><a href="#5-加快BP网络训练速度-Rprop-算法" class="headerlink" title="5. 加快BP网络训练速度:Rprop 算法"></a>5. 加快BP网络训练速度:Rprop 算法</h3><img src="/2024/08/20/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%ADBP%E5%8E%9F%E7%90%86%E6%8E%A8%E5%AF%BC/22.png" class="" title="图22">
 
     </div>
 
@@ -492,7 +481,7 @@ mjx-container[display="true"] + br {
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-count">28</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -543,12 +532,12 @@ mjx-container[display="true"] + br {
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">179k</span>
+    <span title="站点总字数">184k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">4:16</span>
+    <span title="站点阅读时长">4:23</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
   </div>

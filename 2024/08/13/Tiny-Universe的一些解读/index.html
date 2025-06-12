@@ -316,7 +316,7 @@ mjx-container[display="true"] + br {
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>936</span>
+              <span>926</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -336,19 +336,14 @@ mjx-container[display="true"] + br {
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="TinyAgent">TinyAgent</h2>
-<p>关键代码</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">text_completion</span>(<span class="params">self, text, history=[]</span>):</span><br><span class="line">    text = <span class="string">"\nQuestion:"</span> + text</span><br><span class="line">    response, his = self.model.chat(text, history, self.system_prompt)</span><br><span class="line">    <span class="built_in">print</span>(response)</span><br><span class="line">    plugin_name, plugin_args, response = self.parse_latest_plugin_call(response)</span><br><span class="line">    <span class="keyword">if</span> plugin_name:</span><br><span class="line">        response += self.call_plugin(plugin_name, plugin_args)</span><br><span class="line">    response, his = self.model.chat(response, history, self.system_prompt)</span><br><span class="line">    <span class="keyword">return</span> response, his</span><br></pre></td></tr></table></figure>
-<p>总结：</p>
+        <h2 id="TinyAgent"><a href="#TinyAgent" class="headerlink" title="TinyAgent"></a>TinyAgent</h2><p>关键代码<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">text_completion</span>(<span class="params">self, text, history=[]</span>):</span><br><span class="line">    text = <span class="string">"\nQuestion:"</span> + text</span><br><span class="line">    response, his = self.model.chat(text, history, self.system_prompt)</span><br><span class="line">    <span class="built_in">print</span>(response)</span><br><span class="line">    plugin_name, plugin_args, response = self.parse_latest_plugin_call(response)</span><br><span class="line">    <span class="keyword">if</span> plugin_name:</span><br><span class="line">        response += self.call_plugin(plugin_name, plugin_args)</span><br><span class="line">    response, his = self.model.chat(response, history, self.system_prompt)</span><br><span class="line">    <span class="keyword">return</span> response, his</span><br></pre></td></tr></table></figure><br>总结：</p>
 <ul>
-<li>首先对输入文本加一个"question"前缀，然后送入<code>model</code>得到<code>response</code>、<code>his</code></li>
+<li>首先对输入文本加一个”question”前缀，然后送入<code>model</code>得到<code>response</code>、<code>his</code></li>
 <li><code>self.system_prompt</code>就是事先人为构造好的prompt格式</li>
 <li>然后再从<code>response</code>里面拿到<code>plugin_name</code>, <code>plugin_args</code>, <code>response</code>；如果有<code>plugin_name</code>就调用插件（tool）将结果拼接到<code>response</code>末尾</li>
 <li>最后再送入model拿到结果</li>
 </ul>
-<h2 id="TinyRAG">TinyRAG</h2>
-<p>datawhale这块程序写的有一点问题，就总结一下大概思路吧</p>
-<img src="/2024/08/13/Tiny-Universe%E7%9A%84%E4%B8%80%E4%BA%9B%E8%A7%A3%E8%AF%BB/1.png" class="" title="1.png">具体操作细节可以看官网文档的readme.md
+<h2 id="TinyRAG"><a href="#TinyRAG" class="headerlink" title="TinyRAG"></a>TinyRAG</h2><p>datawhale这块程序写的有一点问题，就总结一下大概思路吧<br><img src="/2024/08/13/Tiny-Universe%E7%9A%84%E4%B8%80%E4%BA%9B%E8%A7%A3%E8%AF%BB/1.png" class="" title="1.png">具体操作细节可以看官网文档的readme.md</p>
 <p>RAG的五个部分</p>
 <ul>
 <li>向量化模块</li>
@@ -464,7 +459,7 @@ mjx-container[display="true"] + br {
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-count">28</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -515,12 +510,12 @@ mjx-container[display="true"] + br {
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">179k</span>
+    <span title="站点总字数">184k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">4:16</span>
+    <span title="站点阅读时长">4:23</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
   </div>
