@@ -52,6 +52,15 @@
   
 
 
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?2c68aa96c1c0ba532e310ffc4ddb1e35";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
 
 
 
@@ -229,9 +238,11 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h3 id="关于yield的理解"><a href="#关于yield的理解" class="headerlink" title="关于yield的理解"></a>关于yield的理解</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">n = <span class="keyword">yield</span> r</span><br><span class="line">可以理解为r是生成器返回的，当调用send(<span class="number">5</span>)的时候，会把<span class="number">5</span>传递给<span class="keyword">yield</span>，然后赋值给生成器内部的n</span><br></pre></td></tr></table></figure>
+        <h3 id="关于yield的理解">关于yield的理解</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">n = <span class="keyword">yield</span> r</span><br><span class="line">可以理解为r是生成器返回的，当调用send(<span class="number">5</span>)的时候，会把<span class="number">5</span>传递给<span class="keyword">yield</span>，然后赋值给生成器内部的n</span><br></pre></td></tr></table></figure>
 <p><a target="_blank" rel="noopener" href="https://developer.aliyun.com/article/1617423">如何精确控制 asyncio 中并发运行的多个任务-阿里云开发者社区</a></p>
-<h3 id="python-asyncio的误区"><a href="#python-asyncio的误区" class="headerlink" title="python asyncio的误区"></a>python asyncio的误区</h3><ul>
+<h3 id="python-asyncio的误区">python asyncio的误区</h3>
+<ul>
 <li>如果单纯的只用await，实际上是同步，会阻塞，直到await后面的任务完成</li>
 </ul>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义两个协程</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">task1</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;任务1开始执行&quot;</span>)</span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">2</span>)  <span class="comment"># 模拟耗时操作</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;任务1执行完毕&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">task2</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;任务2开始执行&quot;</span>)</span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">1</span>)  <span class="comment"># 模拟耗时操作</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;任务2执行完毕&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    t1 = time.time()</span><br><span class="line">    <span class="keyword">await</span> task1()</span><br><span class="line">    <span class="keyword">await</span> task2()</span><br><span class="line"></span><br><span class="line">    t2 = time.time()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Total time:&quot;</span>, t2 - t1)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 运行主函数</span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    asyncio.run(main())</span><br><span class="line"></span><br></pre></td></tr></table></figure>
@@ -340,18 +351,18 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-count">29</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
@@ -391,12 +402,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">184k</span>
+    <span title="站点总字数">189k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">4:23</span>
+    <span title="站点阅读时长">4:30</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
   </div>

@@ -52,6 +52,15 @@
   
 
 
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?2c68aa96c1c0ba532e310ffc4ddb1e35";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
 
 
 
@@ -235,15 +244,18 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="openmanus"><a href="#openmanus" class="headerlink" title="openmanus"></a>openmanus</h1><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/692336625">OpenAI API格式详解-Chat Completions - 知乎</a></p>
+        <h1>openmanus</h1>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/692336625">OpenAI API格式详解-Chat Completions - 知乎</a></p>
 <p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/685355104">浅聊大模型（LLM）的工具调用（Function Call） - 知乎</a></p>
 <p>function call，OpenAI没有开源数据构造格式，这种能力也是通过数据训练出来的。</p>
 <p>config.toml  (参考阿里云百炼，其他的API调用基本都是类似的思路，在公司记得加http_client=httpx.AsyncClient(verify=False))</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Global LLM configuration</span></span><br><span class="line">[llm]</span><br><span class="line">model = &quot;qwen-long&quot;        # The LLM model to use</span><br><span class="line">base_url = &quot;https://dashscope.aliyuncs.com/compatible-mode/v1&quot;  # API endpoint URL</span><br><span class="line">api_key = &quot;sk-xxxxxx&quot;                    # Your API key</span><br><span class="line">max_tokens = 8192                           # Maximum number of tokens in the response</span><br><span class="line">temperature = 0.0                           # Controls randomness</span><br></pre></td></tr></table></figure>
 <p>两种模式，分别是稳定版本和开发版本，对应main.py和run_flow.py</p>
-<h2 id="main-py调用链路"><a href="#main-py调用链路" class="headerlink" title="main.py调用链路"></a>main.py调用链路</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">main.py</span><br><span class="line">    --&gt;manus.run()</span><br><span class="line">        --&gt;while</span><br><span class="line">            --&gt;step()</span><br><span class="line">                --&gt;think()  manus.think()--&gt;ToolCallAgent.think()</span><br><span class="line">                --&gt;act()	ToolCallAgent.act()</span><br><span class="line">            --&gt;self.is_stuck()</span><br><span class="line">        --&gt;return results</span><br></pre></td></tr></table></figure>
+<h2 id="main-py调用链路">main.py调用链路</h2>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">main.py</span><br><span class="line">    --&gt;manus.run()</span><br><span class="line">        --&gt;while</span><br><span class="line">            --&gt;step()</span><br><span class="line">                --&gt;think()  manus.think()--&gt;ToolCallAgent.think()</span><br><span class="line">                --&gt;act()	ToolCallAgent.act()</span><br><span class="line">            --&gt;self.is_stuck()</span><br><span class="line">        --&gt;return results</span><br></pre></td></tr></table></figure>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">manus.think()</span><br><span class="line">    --&gt;self.get_browser_state() 初次是只有一个ToolResult.error</span><br><span class="line">        --&gt;super.think()  ToolCallAgent.think()</span><br><span class="line">            --&gt;self.llm.ask_tool</span><br><span class="line">                --&gt;self.client.chat.completions.create(**params).choices[0].message</span><br><span class="line">            --&gt;self.memory.add_message(assistant_msg)</span><br><span class="line">        --&gt;ToolCallAgent.act()</span><br><span class="line">            for loop</span><br><span class="line">                --&gt;self.execute_tool(command)</span><br><span class="line">                    --&gt;json.loads</span><br><span class="line">                    --&gt;self.available_tools.execute</span><br><span class="line">                    --&gt;PythonExecute.execute  开启子进程+timeout</span><br><span class="line">                        --&gt;PythonExecute._run_code</span><br><span class="line">                    --&gt;self._handle_special_tool  判断是不是特殊工具，只有terminate是</span><br><span class="line">                --&gt;self.memory.add_message(tool_msg)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h2 id="run-flow-py调用链路"><a href="#run-flow-py调用链路" class="headerlink" title="run_flow.py调用链路"></a>run_flow.py调用链路</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">PlanningFlow(agents=agents) 构造函数完成赋值，注意data字典在不断扩充，最终调用baseModel的构造完成赋值</span><br><span class="line">PlanningFlow.execute(prompt)</span><br><span class="line">    --&gt;self._create_initial_plan(input_text)</span><br><span class="line">        --&gt;self.llm.ask_tool</span><br><span class="line">        --&gt;self.planning_tool.execute(**args)</span><br><span class="line">        --&gt;self.plans[plan_id]进行一系列修改</span><br><span class="line">    --&gt;while</span><br><span class="line">        --&gt;self._get_current_step_info()</span><br><span class="line">            --&gt;return i, step_info   这里返回每次第一个未完成的index和step_info，step_info就是包含steps[i]的字典</span><br><span class="line">        --&gt;self.get_executor</span><br><span class="line">        --&gt;self._execute_step</span><br><span class="line">    --&gt;return results</span><br></pre></td></tr></table></figure>
+<h2 id="run-flow-py调用链路">run_flow.py调用链路</h2>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">PlanningFlow(agents=agents) 构造函数完成赋值，注意data字典在不断扩充，最终调用baseModel的构造完成赋值</span><br><span class="line">PlanningFlow.execute(prompt)</span><br><span class="line">    --&gt;self._create_initial_plan(input_text)</span><br><span class="line">        --&gt;self.llm.ask_tool</span><br><span class="line">        --&gt;self.planning_tool.execute(**args)</span><br><span class="line">        --&gt;self.plans[plan_id]进行一系列修改</span><br><span class="line">    --&gt;while</span><br><span class="line">        --&gt;self._get_current_step_info()</span><br><span class="line">            --&gt;return i, step_info   这里返回每次第一个未完成的index和step_info，step_info就是包含steps[i]的字典</span><br><span class="line">        --&gt;self.get_executor</span><br><span class="line">        --&gt;self._execute_step</span><br><span class="line">    --&gt;return results</span><br></pre></td></tr></table></figure>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">self._execute_step</span><br><span class="line">    --&gt;self._get_plan_text()</span><br><span class="line">    --&gt;generate step_prompt</span><br><span class="line">    --&gt;executor.run(step_prompt)  其实就是agent.run,对应前面写的manus.run,这里会进行一系列的step，直到finish</span><br><span class="line">    --&gt;self._mark_step_completed()</span><br></pre></td></tr></table></figure>
 <p>值得注意的点</p>
 <ul>
@@ -253,14 +265,15 @@
 <li>self._get_current_step_info()拿到的step_info会根据[]去提取type字段，然后决定用哪一个agent，否则用默认的</li>
 <li>项目中的字典查看太麻烦，其实是python的字典，用black工具格式化看</li>
 <li>think的每一轮，都会更新memory，在开头加user的message，在末尾加assistant的message</li>
-<li>在执行async with self.state_context(AgentState.RUNNING)的时候，内部self.step()可能会将self.state设置为AgentState.FINISHED，但是循环仍然继续，猜测就是这个异步上下文在起作用，保证状态不发生变化！比如在执行run_flow.py的时候，会发现明明finished了，还是会继续执行？因为在main.py中只有一个agent.run调用，但是在run_flow.py中，每一步中，都会调用agent.run，在run里面上下文管理器重新设置state为AgentState.RUNNING，如果中间agent改为AgentState.FINISHED了，就直接退出循环。但是不管内部做了什么修改，在离开上下文管理器的时候，在finally部分会重新恢复state为AgentState.IDLE。 <a target="_blank" rel="noopener" href="http://www.bjhee.com/python-context.html">谈一谈Python的上下文管理器 | 思诚之道</a> </li>
+<li>在执行async with self.state_context(AgentState.RUNNING)的时候，内部self.step()可能会将self.state设置为AgentState.FINISHED，但是循环仍然继续，猜测就是这个异步上下文在起作用，保证状态不发生变化！比如在执行run_flow.py的时候，会发现明明finished了，还是会继续执行？因为在main.py中只有一个agent.run调用，但是在run_flow.py中，每一步中，都会调用agent.run，在run里面上下文管理器重新设置state为AgentState.RUNNING，如果中间agent改为AgentState.FINISHED了，就直接退出循环。但是不管内部做了什么修改，在离开上下文管理器的时候，在finally部分会重新恢复state为AgentState.IDLE。 <a target="_blank" rel="noopener" href="http://www.bjhee.com/python-context.html">谈一谈Python的上下文管理器 | 思诚之道</a></li>
 <li>前面提到finally恢复state为AgentState.IDLE，但是flow的结束判断也是AgentState.FINISHED啊？那么flow岂不是一直退出不了？flow的while循环有两个break点，打日志发现是第一个break退出的。第二个break暂时不清楚。如果第一个break注释掉，后面会捕获错误，然后也能退出</li>
 </ul>
 <p>整体逻辑：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">prompt--&gt;</span><span class="language-bash">steps</span></span><br><span class="line">    --&gt;for step in steps</span><br><span class="line">        --&gt;think--&gt;act--&gt;think-------until finish</span><br></pre></td></tr></table></figure>
-<h2 id="Config模块"><a href="#Config模块" class="headerlink" title="Config模块"></a>Config模块</h2><p>app/config.py</p>
+<h2 id="Config模块">Config模块</h2>
+<p>app/config.py</p>
 <p>这块没什么好说的，就是解析toml文件</p>
-<p>llm.py：tokens数量计算、format_messages消息格式的转换，区分了两种type，text和image_url，ask添加retry重连机制等，ask默认是Steam流式处理，流式和非流式有不同的处理方式。ask_with_images和ask_tool都是类似的处理方式，但是tool不支持流式。</p>
+<p><a target="_blank" rel="noopener" href="http://llm.py">llm.py</a>：tokens数量计算、format_messages消息格式的转换，区分了两种type，text和image_url，ask添加retry重连机制等，ask默认是Steam流式处理，流式和非流式有不同的处理方式。ask_with_images和ask_tool都是类似的处理方式，但是tool不支持流式。</p>
 <p>openManus虽然只有基础的功能，但是agent框架、API调用、Pytantic校验都值得学习。</p>
 
     </div>
@@ -345,7 +358,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#openmanus"><span class="nav-text">openmanus</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#main-py%E8%B0%83%E7%94%A8%E9%93%BE%E8%B7%AF"><span class="nav-text">main.py调用链路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#run-flow-py%E8%B0%83%E7%94%A8%E9%93%BE%E8%B7%AF"><span class="nav-text">run_flow.py调用链路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Config%E6%A8%A1%E5%9D%97"><span class="nav-text">Config模块</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text">openmanus</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#main-py%E8%B0%83%E7%94%A8%E9%93%BE%E8%B7%AF"><span class="nav-text">main.py调用链路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#run-flow-py%E8%B0%83%E7%94%A8%E9%93%BE%E8%B7%AF"><span class="nav-text">run_flow.py调用链路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Config%E6%A8%A1%E5%9D%97"><span class="nav-text">Config模块</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -359,18 +372,18 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-count">29</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
@@ -410,12 +423,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">184k</span>
+    <span title="站点总字数">189k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">4:23</span>
+    <span title="站点阅读时长">4:30</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
   </div>
