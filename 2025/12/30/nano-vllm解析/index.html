@@ -22,20 +22,21 @@
     var CONFIG = {"hostname":"wjdmyby98k.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="python asyncio异步库的一些总结">
+  <meta name="description" content="nano-vllm解析，整体代码其实比较清晰简洁的">
 <meta property="og:type" content="article">
-<meta property="og:title" content="asyncio总结">
-<meta property="og:url" content="https://wjdmyby98k.github.io/2025/03/31/asyncio%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:title" content="nano-vllm解析">
+<meta property="og:url" content="https://wjdmyby98k.github.io/2025/12/30/nano-vllm%E8%A7%A3%E6%9E%90/index.html">
 <meta property="og:site_name" content="就是要摸鱼">
-<meta property="og:description" content="python asyncio异步库的一些总结">
+<meta property="og:description" content="nano-vllm解析，整体代码其实比较清晰简洁的">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-03-31T13:28:51.000Z">
-<meta property="article:modified_time" content="2025-03-31T13:30:27.286Z">
+<meta property="article:published_time" content="2025-12-30T14:49:42.000Z">
+<meta property="article:modified_time" content="2025-12-30T14:51:51.062Z">
 <meta property="article:author" content="zhangyitao">
-<meta property="article:tag" content="python">
+<meta property="article:tag" content="LLM">
+<meta property="article:tag" content="Agent">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://wjdmyby98k.github.io/2025/03/31/asyncio%E6%80%BB%E7%BB%93/">
+<link rel="canonical" href="https://wjdmyby98k.github.io/2025/12/30/nano-vllm%E8%A7%A3%E6%9E%90/">
 
 
 <script id="page-configurations">
@@ -48,7 +49,7 @@
   };
 </script>
 
-  <title>asyncio总结 | 就是要摸鱼</title>
+  <title>nano-vllm解析 | 就是要摸鱼</title>
   
 
 
@@ -173,7 +174,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://wjdmyby98k.github.io/2025/03/31/asyncio%E6%80%BB%E7%BB%93/">
+    <link itemprop="mainEntityOfPage" href="https://wjdmyby98k.github.io/2025/12/30/nano-vllm%E8%A7%A3%E6%9E%90/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -186,7 +187,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          asyncio总结
+          nano-vllm解析
         </h1>
 
         <div class="post-meta">
@@ -197,7 +198,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2025-03-31 21:28:51 / 修改时间：21:30:27" itemprop="dateCreated datePublished" datetime="2025-03-31T21:28:51+08:00">2025-03-31</time>
+              <time title="创建时间：2025-12-30 22:49:42 / 修改时间：22:51:51" itemprop="dateCreated datePublished" datetime="2025-12-30T22:49:42+08:00">2025-12-30</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -205,7 +206,11 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                  <a href="/categories/LLM/" itemprop="url" rel="index"><span itemprop="name">LLM</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Agent/" itemprop="url" rel="index"><span itemprop="name">Agent</span></a>
                 </span>
             </span>
 
@@ -222,16 +227,16 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.3k</span>
+              <span>2.1k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
+              <span>3 分钟</span>
             </span>
-            <div class="post-description">python asyncio异步库的一些总结</div>
+            <div class="post-description">nano-vllm解析，整体代码其实比较清晰简洁的</div>
 
         </div>
       </header>
@@ -242,22 +247,35 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h3 id="关于yield的理解">关于yield的理解</h3>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">n = <span class="keyword">yield</span> r</span><br><span class="line">可以理解为r是生成器返回的，当调用send(<span class="number">5</span>)的时候，会把<span class="number">5</span>传递给<span class="keyword">yield</span>，然后赋值给生成器内部的n</span><br></pre></td></tr></table></figure>
-<p><a target="_blank" rel="noopener" href="https://developer.aliyun.com/article/1617423">如何精确控制 asyncio 中并发运行的多个任务-阿里云开发者社区</a></p>
-<h3 id="python-asyncio的误区">python asyncio的误区</h3>
-<ul>
-<li>如果单纯的只用await，实际上是同步，会阻塞，直到await后面的任务完成</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义两个协程</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">task1</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;任务1开始执行&quot;</span>)</span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">2</span>)  <span class="comment"># 模拟耗时操作</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;任务1执行完毕&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">task2</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;任务2开始执行&quot;</span>)</span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">1</span>)  <span class="comment"># 模拟耗时操作</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;任务2执行完毕&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    t1 = time.time()</span><br><span class="line">    <span class="keyword">await</span> task1()</span><br><span class="line">    <span class="keyword">await</span> task2()</span><br><span class="line"></span><br><span class="line">    t2 = time.time()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Total time:&quot;</span>, t2 - t1)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 运行主函数</span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    asyncio.run(main())</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<ul>
-<li>真正的异步</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义两个协程</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">task1</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;任务1开始执行&quot;</span>)</span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">2</span>)  <span class="comment"># 模拟耗时操作</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;任务1执行完毕&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">task2</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;任务2开始执行&quot;</span>)</span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">1</span>)  <span class="comment"># 模拟耗时操作</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;任务2执行完毕&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 主协程，使用create_task并发执行两个任务</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;主协程开始执行&quot;</span>)</span><br><span class="line">    t1 = time.time()</span><br><span class="line">    <span class="comment"># 创建任务</span></span><br><span class="line">    task_1 = asyncio.create_task(task1())</span><br><span class="line">    task_2 = asyncio.create_task(task2())</span><br><span class="line">    <span class="comment"># 等待所有任务完成</span></span><br><span class="line">    <span class="keyword">await</span> asyncio.gather(task_1, task_2)</span><br><span class="line">    t2 = time.time()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Total time:&quot;</span>, t2 - t1)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;主协程执行完毕&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 运行主协程</span></span><br><span class="line">asyncio.run(main())</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<ul>
-<li><strong>仅用 <code>await</code> 顺序调用协程</strong>时，代码会像同步一样<strong>串行执行</strong>。</li>
-<li>只有通过 <code>asyncio.gather()</code>、<code>create_task()</code> 等方式将协程<strong>交给事件循环并行调度</strong>，才能真正实现并发。</li>
-</ul>
+        <h2 id="nano-vllm解析">nano-vllm解析</h2>
+<h3 id="Sequence">Sequence</h3>
+<p>实例化的时候会传入一个token_ids，其实就是prompt编码以后的id列表。在内部会深拷贝copy一份，后续生成的token id会一个一个的加在该列表后面。</p>
+<p>同时内部会记录这些id用了多少个block，每个block大小为256，即每个block最多存256个token id</p>
+<h3 id="block-manager">block_manager</h3>
+<p>初始化的时候，需要num_blocks，代表总共管理多少块block，<strong>这个参数会在model_runner里面计算</strong>。</p>
+<h4 id="Block">Block</h4>
+<p>内部类，用来记录每个block对应的block_id，引用数量，hash值、以及对应的token_ids列表</p>
+<h4 id="BlockManager">BlockManager</h4>
+<p>初始化的时候，block总数num_blocks以及每块的大小block_size，前者对应一个维护Block对象的列表</p>
+<p>同时在内部还会维护一个当前空闲的队列，以及当前正在使用的哈希表。内部记录的都是block_id</p>
+<p>compute_hash：输入一个token_ids的列表，输出一个哈希值</p>
+<p>_allocate_block：返回对应block_id的block对象，并reset，同时更新self.free_block_ids和self.used_block_ids</p>
+<p>_deallocate_block：释放block_id对应的block对象，但不是真正的释放，只是在内部记录一下状态，只有引用为0的时候才会调用</p>
+<p>can_allocate：给定seq，判断有没有足够的空间去装下</p>
+<p>allocate：<strong>循环遍历输入seq需要的block数量，计算每个block记录的token_ids的哈希值h。因为内部有一个字典，专门来记录哈希值和block_id的映射，如果不存在h，那么代表没有命中缓存，此时需要新的block去存，直接去self.free_block_ids队列中取第一个id，即可拿到对应的block。如果命中了缓存，那就更新seq中的缓存token的数量（+block_size），注意这里会额外判断一下，看当前的block_id是否在self.used_block_ids中，如果在的话，就引用+1，否则，需要拿一块新的block。再看h是否为-1，为-1代表可能是最后一块block，因为只有最后一块block，可能才会占不满！-1的时候代表命中了缓存，需要更新block的信息。最后，将所有的block_id全部统计到seq的block_table列表中，即双向记录。</strong></p>
+<p>deallocate：释放block，内部调用_deallocate_block</p>
+<p>can_append、may_append：一个是判断有没有空闲的块，一个是动态计算块的追加和更新。后者有三种情况，分别是序列长度取模为1，取模为0，已经其他情况。为1就是刚好填满了一整块，开辟新的块，为0就是刚好填满了一整块，此时会计算一个前缀哈希，目的是为了缓存利用。但是这里块大小为256，实际缓存命中的要求感觉比较苛刻？</p>
+<h3 id="Scheduler">Scheduler</h3>
+<p>字面理解，调度器，是核心模块。初始化的时候会进行一些初始化，内部维护了两个队列，self.waiting、self.running，分别代表等待队列和正在执行的队列</p>
+<p>schedule：就是返回一个调度列表[]以及一个标志位，用来区分两个阶段</p>
+<p>prefill阶段，如果waiting不为空且没超出最长seq，从waiting中取出第一个seq，检查是否超过最大tokens限制，是否有足够的空间分配。如果都满足，就分配block，并将当前的seq从等待队列移动到执行队列。</p>
+<p>decode阶段，如果running不为空且没超出最长seq，从running中取出一个seq，如果没有足够的缓存，如果running还有seq，那就把preempt队尾的seq，如果running已经为空了，那就preempt当前的seq。反之缓存足够就记录并分配缓存。最后返回的时候由于优先级的原因，会再次取反。</p>
+<p>preempt：抢占调度，把传入的seq占用的缓存都释放，添加到waiting队头，表示下次优先处理</p>
+<p>postprocess：负责处理生成的token，一个一个添加，直到finished释放缓存</p>
+<h3 id="调用链路">调用链路</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">generate</span><br><span class="line">	-&gt;self.step()</span><br><span class="line">		-&gt;self.scheduler.schedule()</span><br><span class="line">        -&gt;self.model_runner.call(<span class="string">&quot;run&quot;</span>, seqs, is_prefill)</span><br><span class="line">        	-&gt;run</span><br><span class="line">            -&gt;self.prepare_prefill</span><br><span class="line">            -&gt;self.run_model</span><br><span class="line">        -&gt;self.scheduler.postprocess</span><br><span class="line">		</span><br></pre></td></tr></table></figure>
+<p>最后附加一下for loop的本质</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 实际调用了 __iter__ 方法返回自身，包括了 __next__ 方法的对象</span></span><br><span class="line">cls_a = <span class="built_in">iter</span>(cls_a)</span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="comment"># 然后调用对象的 __next__ 方法，不断返回元素</span></span><br><span class="line">        value = <span class="built_in">next</span>(cls_a)</span><br><span class="line">        <span class="built_in">print</span>(value)</span><br><span class="line">    <span class="comment"># 如果迭代完成，则捕获异常即可</span></span><br><span class="line">    <span class="keyword">except</span> StopIteration:</span><br><span class="line">        <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
 
     </div>
 
@@ -267,7 +285,8 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/python/" rel="tag"># python</a>
+              <a href="/tags/LLM/" rel="tag"># LLM</a>
+              <a href="/tags/Agent/" rel="tag"># Agent</a>
           </div>
 
         
@@ -276,13 +295,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2025/03/26/openManus%E8%A7%A3%E8%AF%BB/" rel="prev" title="openManus解读">
-      <i class="fa fa-chevron-left"></i> openManus解读
+    <a href="/2025/07/21/%E7%8E%8B%E6%A0%91%E6%A3%AE%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="prev" title="王树森强化学习笔记">
+      <i class="fa fa-chevron-left"></i> 王树森强化学习笔记
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2025/04/16/MetaGPT%E8%A7%A3%E8%AF%BB/" rel="next" title="MetaGPT解读">
-      MetaGPT解读 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -341,7 +357,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E4%BA%8Eyield%E7%9A%84%E7%90%86%E8%A7%A3"><span class="nav-text">关于yield的理解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#python-asyncio%E7%9A%84%E8%AF%AF%E5%8C%BA"><span class="nav-text">python asyncio的误区</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#nano-vllm%E8%A7%A3%E6%9E%90"><span class="nav-text">nano-vllm解析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Sequence"><span class="nav-text">Sequence</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#block-manager"><span class="nav-text">block_manager</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Block"><span class="nav-text">Block</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#BlockManager"><span class="nav-text">BlockManager</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Scheduler"><span class="nav-text">Scheduler</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B0%83%E7%94%A8%E9%93%BE%E8%B7%AF"><span class="nav-text">调用链路</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
