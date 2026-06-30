@@ -247,16 +247,11 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="nano-vllm解析">nano-vllm解析</h2>
-<h3 id="Sequence">Sequence</h3>
-<p>实例化的时候会传入一个token_ids，其实就是prompt编码以后的id列表。在内部会深拷贝copy一份，后续生成的token id会一个一个的加在该列表后面。</p>
+        <h2 id="nano-vllm解析"><a href="#nano-vllm解析" class="headerlink" title="nano-vllm解析"></a>nano-vllm解析</h2><h3 id="Sequence"><a href="#Sequence" class="headerlink" title="Sequence"></a>Sequence</h3><p>实例化的时候会传入一个token_ids，其实就是prompt编码以后的id列表。在内部会深拷贝copy一份，后续生成的token id会一个一个的加在该列表后面。</p>
 <p>同时内部会记录这些id用了多少个block，每个block大小为256，即每个block最多存256个token id</p>
-<h3 id="block-manager">block_manager</h3>
-<p>初始化的时候，需要num_blocks，代表总共管理多少块block，<strong>这个参数会在model_runner里面计算</strong>。</p>
-<h4 id="Block">Block</h4>
-<p>内部类，用来记录每个block对应的block_id，引用数量，hash值、以及对应的token_ids列表</p>
-<h4 id="BlockManager">BlockManager</h4>
-<p>初始化的时候，block总数num_blocks以及每块的大小block_size，前者对应一个维护Block对象的列表</p>
+<h3 id="block-manager"><a href="#block-manager" class="headerlink" title="block_manager"></a>block_manager</h3><p>初始化的时候，需要num_blocks，代表总共管理多少块block，<strong>这个参数会在model_runner里面计算</strong>。</p>
+<h4 id="Block"><a href="#Block" class="headerlink" title="Block"></a>Block</h4><p>内部类，用来记录每个block对应的block_id，引用数量，hash值、以及对应的token_ids列表</p>
+<h4 id="BlockManager"><a href="#BlockManager" class="headerlink" title="BlockManager"></a>BlockManager</h4><p>初始化的时候，block总数num_blocks以及每块的大小block_size，前者对应一个维护Block对象的列表</p>
 <p>同时在内部还会维护一个当前空闲的队列，以及当前正在使用的哈希表。内部记录的都是block_id</p>
 <p>compute_hash：输入一个token_ids的列表，输出一个哈希值</p>
 <p>_allocate_block：返回对应block_id的block对象，并reset，同时更新self.free_block_ids和self.used_block_ids</p>
@@ -265,15 +260,13 @@
 <p>allocate：<strong>循环遍历输入seq需要的block数量，计算每个block记录的token_ids的哈希值h。因为内部有一个字典，专门来记录哈希值和block_id的映射，如果不存在h，那么代表没有命中缓存，此时需要新的block去存，直接去self.free_block_ids队列中取第一个id，即可拿到对应的block。如果命中了缓存，那就更新seq中的缓存token的数量（+block_size），注意这里会额外判断一下，看当前的block_id是否在self.used_block_ids中，如果在的话，就引用+1，否则，需要拿一块新的block。再看h是否为-1，为-1代表可能是最后一块block，因为只有最后一块block，可能才会占不满！-1的时候代表命中了缓存，需要更新block的信息。最后，将所有的block_id全部统计到seq的block_table列表中，即双向记录。</strong></p>
 <p>deallocate：释放block，内部调用_deallocate_block</p>
 <p>can_append、may_append：一个是判断有没有空闲的块，一个是动态计算块的追加和更新。后者有三种情况，分别是序列长度取模为1，取模为0，已经其他情况。为1就是刚好填满了一整块，开辟新的块，为0就是刚好填满了一整块，此时会计算一个前缀哈希，目的是为了缓存利用。但是这里块大小为256，实际缓存命中的要求感觉比较苛刻？</p>
-<h3 id="Scheduler">Scheduler</h3>
-<p>字面理解，调度器，是核心模块。初始化的时候会进行一些初始化，内部维护了两个队列，self.waiting、self.running，分别代表等待队列和正在执行的队列</p>
+<h3 id="Scheduler"><a href="#Scheduler" class="headerlink" title="Scheduler"></a>Scheduler</h3><p>字面理解，调度器，是核心模块。初始化的时候会进行一些初始化，内部维护了两个队列，self.waiting、self.running，分别代表等待队列和正在执行的队列</p>
 <p>schedule：就是返回一个调度列表[]以及一个标志位，用来区分两个阶段</p>
 <p>prefill阶段，如果waiting不为空且没超出最长seq，从waiting中取出第一个seq，检查是否超过最大tokens限制，是否有足够的空间分配。如果都满足，就分配block，并将当前的seq从等待队列移动到执行队列。</p>
 <p>decode阶段，如果running不为空且没超出最长seq，从running中取出一个seq，如果没有足够的缓存，如果running还有seq，那就把preempt队尾的seq，如果running已经为空了，那就preempt当前的seq。反之缓存足够就记录并分配缓存。最后返回的时候由于优先级的原因，会再次取反。</p>
 <p>preempt：抢占调度，把传入的seq占用的缓存都释放，添加到waiting队头，表示下次优先处理</p>
 <p>postprocess：负责处理生成的token，一个一个添加，直到finished释放缓存</p>
-<h3 id="调用链路">调用链路</h3>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">generate</span><br><span class="line">	-&gt;self.step()</span><br><span class="line">		-&gt;self.scheduler.schedule()</span><br><span class="line">        -&gt;self.model_runner.call(<span class="string">&quot;run&quot;</span>, seqs, is_prefill)</span><br><span class="line">        	-&gt;run</span><br><span class="line">            -&gt;self.prepare_prefill</span><br><span class="line">            -&gt;self.run_model</span><br><span class="line">        -&gt;self.scheduler.postprocess</span><br><span class="line">		</span><br></pre></td></tr></table></figure>
+<h3 id="调用链路"><a href="#调用链路" class="headerlink" title="调用链路"></a>调用链路</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">generate</span><br><span class="line">	-&gt;self.step()</span><br><span class="line">		-&gt;self.scheduler.schedule()</span><br><span class="line">        -&gt;self.model_runner.call(<span class="string">&quot;run&quot;</span>, seqs, is_prefill)</span><br><span class="line">        	-&gt;run</span><br><span class="line">            -&gt;self.prepare_prefill</span><br><span class="line">            -&gt;self.run_model</span><br><span class="line">        -&gt;self.scheduler.postprocess</span><br><span class="line">		</span><br></pre></td></tr></table></figure>
 <p>最后附加一下for loop的本质</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 实际调用了 __iter__ 方法返回自身，包括了 __next__ 方法的对象</span></span><br><span class="line">cls_a = <span class="built_in">iter</span>(cls_a)</span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="comment"># 然后调用对象的 __next__ 方法，不断返回元素</span></span><br><span class="line">        value = <span class="built_in">next</span>(cls_a)</span><br><span class="line">        <span class="built_in">print</span>(value)</span><br><span class="line">    <span class="comment"># 如果迭代完成，则捕获异常即可</span></span><br><span class="line">    <span class="keyword">except</span> StopIteration:</span><br><span class="line">        <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
 
@@ -425,12 +418,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">335k</span>
+    <span title="站点总字数">306k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">7:58</span>
+    <span title="站点阅读时长">7:17</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
   </div>
