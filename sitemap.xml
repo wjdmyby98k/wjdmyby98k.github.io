@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://wjdmyby98k.github.io/2026/06/30/llamafactory%E8%B0%83%E8%AF%95functioncall/</loc>
+    
+    <lastmod>2026-06-30</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://wjdmyby98k.github.io/2026/06/30/%E5%B8%B8%E8%A7%81%E7%9A%84vllm%E6%8E%A8%E7%90%86%E5%92%8Ctrl%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</loc>
     
     <lastmod>2026-06-30</lastmod>
@@ -306,7 +315,14 @@
   </url>
   
   <url>
-    <loc>https://wjdmyby98k.github.io/tags/CMake/</loc>
+    <loc>https://wjdmyby98k.github.io/tags/leetcode/</loc>
+    <lastmod>2026-06-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://wjdmyby98k.github.io/tags/Linux/</loc>
     <lastmod>2026-06-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -320,7 +336,7 @@
   </url>
   
   <url>
-    <loc>https://wjdmyby98k.github.io/tags/leetcode/</loc>
+    <loc>https://wjdmyby98k.github.io/tags/CMake/</loc>
     <lastmod>2026-06-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -335,13 +351,6 @@
   
   <url>
     <loc>https://wjdmyby98k.github.io/tags/Agent/</loc>
-    <lastmod>2026-06-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://wjdmyby98k.github.io/tags/Linux/</loc>
     <lastmod>2026-06-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -399,7 +408,7 @@
   </url>
   
   <url>
-    <loc>https://wjdmyby98k.github.io/categories/CMake/</loc>
+    <loc>https://wjdmyby98k.github.io/categories/Linux/</loc>
     <lastmod>2026-06-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -413,14 +422,14 @@
   </url>
   
   <url>
-    <loc>https://wjdmyby98k.github.io/categories/LLM/</loc>
+    <loc>https://wjdmyby98k.github.io/categories/CMake/</loc>
     <lastmod>2026-06-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://wjdmyby98k.github.io/categories/Linux/</loc>
+    <loc>https://wjdmyby98k.github.io/categories/LLM/</loc>
     <lastmod>2026-06-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -434,14 +443,14 @@
   </url>
   
   <url>
-    <loc>https://wjdmyby98k.github.io/categories/Agent/</loc>
+    <loc>https://wjdmyby98k.github.io/categories/c/</loc>
     <lastmod>2026-06-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://wjdmyby98k.github.io/categories/c/</loc>
+    <loc>https://wjdmyby98k.github.io/categories/Agent/</loc>
     <lastmod>2026-06-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
